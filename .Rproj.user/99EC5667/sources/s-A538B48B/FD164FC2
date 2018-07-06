@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1530816617272.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "FD164FC2",
+    "lastKnownWriteTime" : 1530818630,
+    "last_content_update" : 1530818630760,
+    "path" : "~/R/blogs/r-mageddon/config.toml",
+    "project_path" : "config.toml",
+    "properties" : {
+        "cursorPosition" : "30,38",
+        "scrollLine" : "15"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "toml"
+}

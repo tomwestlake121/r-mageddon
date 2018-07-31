@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Interactive Premier League Table</title>
+	<meta name="description" content="">
+	<meta name="generator" content="Hugo 0.45.1" />
+	<meta property="og:title" content="Interactive Premier League Table" />
+<meta property="og:description" content="For my inaugural blog post I decided I would step into the world of animated graphics for the first time. I was inspired by the presentation that Thomas Lin Pedersen gave at the useR! conference on gganimate and was motivated to create my very first gif.
+I rooted around for ideas and decided upon creating an animated table of the Premier League for the last season, with the clubs being depicted by their crests." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/interactive-premier-league-table/" />
+
+
+
+<meta property="article:published_time" content="2018-07-31T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2018-07-31T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+	<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Interactive Premier League Table"/>
+<meta name="twitter:description" content="For my inaugural blog post I decided I would step into the world of animated graphics for the first time. I was inspired by the presentation that Thomas Lin Pedersen gave at the useR! conference on gganimate and was motivated to create my very first gif.
+I rooted around for ideas and decided upon creating an animated table of the Premier League for the last season, with the clubs being depicted by their crests."/>
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<script type="text/javascript" src="/js/scripts.js"></script>
+	<link rel="shortcut icon" href="/favicon.ico">
+	
+</head>
+<body class="body body-right-sidebar">
+	<div class="container container-outer">
+		<header class="header">
+			<div class="container container-inner">
+				<div class="logo" role="banner">
+					<a class="logo__link" href="/" title="R-mageddon" rel="home">
+						<div class="logo__title">R-mageddon</div>
+						<div class="logo__tagline">I&#39;ve not failed, I&#39;ve just found 10,000 ways that won&#39;t work.</div>
+					</a>
+				</div>
+			</div>
+			
+<nav class="menu">
+	<ul class="menu__list">
+		<li class="menu__item"><a class="menu__link" href="/about/">ABOUT ME</a></li>
+	</ul>
+</nav>
+
+		</header>
+		<div class="wrapper clearfix">
+
+<main class="main content">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Interactive Premier League Table</h1><div class="post__meta meta">
+<svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
+<time class="post__meta-date meta-date" datetime="2018-07-31T00:00:00">July 31, 2018</time></div>
+		</header><div class="post__content clearfix">
+			<p>For my inaugural blog post I decided I would step into the world of animated graphics for the first time. I was inspired by the <a href="(https://www.youtube.com/watch?v=21ZWDrTukEs)">presentation</a> that Thomas Lin Pedersen gave at the <a href="https://user2018.r-project.org/">useR!</a> conference on <a href="https://github.com/thomasp85/gganimate">gganimate</a> and was motivated to create my very first gif.</p>
+<p>I rooted around for ideas and decided upon creating an animated table of the Premier League for the last season, with the clubs being depicted by their crests. A quick google pointed me towards a <a href="https://www.football-data.org/">free football API</a> and that was already an <a href="https://github.com/dashee87/footballR">R package</a> to interface with this API. NB: This API has since been updated to v2, which isn’t currently supported by the linked package, but is perfectly fine for the historical dataset I wished to extract.</p>
+<p>So the first thing we need to do is install and load the relevant packages:</p>
+<pre class="r"><code>install.packages(c(&quot;tidyverse&quot;, &quot;ggimage&quot;))
+devtools::install_github(&quot;thomasp85/gganimate&quot;)
+devtools::install_github(&quot;dashee87/footballR&quot;)
+
+library(tidyverse)
+library(footballR)
+library(gganimate) 
+library(ggimage)</code></pre>
+<p>Now as I wished to make multiple calls to the football-data API, I registered an account that would give me an API token key. Then I set this key in my script (not shared for obvious reasons.</p>
+<pre class="r"><code>my_token &lt;- &quot;xxx&quot;</code></pre>
+<p>The <code>fdo_leagueTable</code> function would give me the final league table data for any competition, for any competition id I provided. The id for the Premier League 2017/18 season was 445. However I also wanted to get the league table positions for all 38 match days, so I needed to iterate through multiple API calls, varying the matchDay argument. Firstly however I wanted to define the function beforehand so the result was a tidy dataframe, allowing me to utilise the <code>purrr</code> function <code>map_rdf</code>.</p>
+<pre class="r"><code>import_tidy_table &lt;- function(x){
+  data &lt;- fdo_leagueTable(id = 445,response = &quot;full&quot;, matchDay = x, token = my_token)
+  data &lt;- data$standing
+  data$`_links` &lt;- NULL
+  data$home &lt;- NULL
+  data$away &lt;- NULL
+  final_data &lt;- data
+}</code></pre>
+<p>Next I iterate through the first 19 matchdays first, to not call upon the API too many times within a single minute. (I’m sure there must be a better way of doing this)</p>
+<pre class="r"><code>first_19_matches &lt;- map_dfr(1:19, import_tidy_table, .id = &quot;match_day&quot;) %&gt;%
+  mutate(match = as.numeric(match_day))</code></pre>
+<p>Upon waiting a minute I run again for the second half of the Premier League season, not forgetting to add 19 to get the correct match day value.</p>
+<pre class="r"><code>last_19_matches &lt;- map_dfr(20:38, import_tidy_table, .id = &quot;match_day&quot;) %&gt;%
+  mutate(match_day = as.numeric(match_day) + 19)</code></pre>
+<p>As I want to start the graphic at the beginning of the season, I create a dataset where match day is 0 and bind all my data together. Additionally I a new column, img, which is the path to each teams crest and I turn match_day into an integer, for better showcasing in my gif title.</p>
+<pre class="r"><code>data &lt;- first_19_matches %&gt;%
+  filter(match_day == 1) %&gt;%
+  mutate(match_day = 0) %&gt;%
+  arrange(teamName) %&gt;%
+  mutate(position = 1:n()) %&gt;%
+  bind_rows(first_19_matches) %&gt;%
+  bind_rows(last_19_matches) %&gt;%
+  mutate(img = paste0(&quot;logos/&quot;, teamName, &quot;.png&quot;)) %&gt;%
+  mutate(match_day = as.integer(match_day))</code></pre>
+<p>Now the final section of code will be used to create my animation!! I pass my data to ggplot, with x being the match day and y being the position. I then pass the crests, from the img variable, to the <code>geom_image</code> function and add match day to transition_time so the crests will move along the x axis. I tried a few variations around this, with x being the team name for example, but I felt this combinated offered the best output. Next I create a set of coloured blocks to represent the winner, those teams that qualify for the Champions League and those teams that are relegated. Finally I reverse the y axis scale to depict the winning team at the top, which seemed much more logical.</p>
+<pre class="r"><code>ggplot(data, aes(match_day, position)) + geom_image(aes(image = img)) + theme_bw() +
+  labs(x = &quot;Match Day&quot;, y = &quot;Standing&quot;, title = &#39;2017/18 Premier League - Match Day: {frame_time}&#39;) + transition_time(match_day) +
+  geom_tile(alpha = 0.05, aes(x = 19, width = 40, y = 1, fill = &quot;a&quot;)) + 
+  geom_tile(alpha = 0.05, aes(x = 19, width = 40, y = 3, height = 3, fill = &quot;b&quot;)) + geom_tile(alpha = 0.05, aes(x = 19, width = 40,y = 19,height = 3.5, fill = &quot;c&quot;)) + scale_fill_manual(values = c(&quot;darkgreen&quot;, &quot;darkolivegreen3&quot;, &quot;firebrick4&quot;)) + 
+  scale_y_reverse() + theme(legend.position=&quot;none&quot;)</code></pre>
+<div class="figure">
+<img src="/img/final_animated_prem_table.gif" alt="Animated Premier League 17/18 Table" />
+<p class="caption">Animated Premier League 17/18 Table</p>
+</div>
+<p>So there we have my animated Premier League table, a fairly good result for my first try. Two particular areas I want to improve are:</p>
+<ul>
+<li>The image quality of the crests is quite low, I did improve this somewhat by finding smaller .png files, but there is still plenty of room for improvement.</li>
+<li>I think a coloured line that follows behind each team’s crest would add a lot to this animation. I did spend a little time trying, but the line only appeared for the current match day.</li>
+</ul>
+<p>P.S. As with all attemps to create a final output, there were plenty of abominations along the way. As it’s important to show your failures, as well as your successes, I’ve inserted a couple of them below.</p>
+<div class="figure">
+<img src="/img/abomination1.gif" alt="Abomination 1" />
+<p class="caption">Abomination 1</p>
+</div>
+<div class="figure">
+<img src="/img/abomination2.gif" alt="Abomination 2" />
+<p class="caption">Abomination 2</p>
+</div>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 16 16"><path d="M16 9.5c0 .373-.24.74-.5 1l-5 5c-.275.26-.634.5-1 .5-.373 0-.74-.24-1-.5L1 8a2.853 2.853 0 0 1-.7-1C.113 6.55 0 5.973 0 5.6V1.4C0 1.034.134.669.401.401.67.134 1.034 0 1.4 0h4.2c.373 0 .95.113 1.4.3.45.187.732.432 1 .7l7.5 7.502c.26.274.5.632.5.998zM3.5 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/gganimate/" rel="tag">gganimate</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/r/" rel="tag">R</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/data-wrangling/" rel="tag">data wrangling</a></li>
+	</ul>
+</div>
+	</article>
+	
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Tomas Westlake avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Tomas Westlake</span>
+	</div>
+	<div class="authorbox__description">
+		Data Scientist for the UK Government
+	</div>
+</div>
+	
+	
+</main>
+
+<aside class="sidebar">
+	
+<div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="/" />
+	</form>
+</div>
+	
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/interactive-premier-league-table/">Interactive Premier League Table</a></li>
+		</ul>
+	</div>
+</div>
+	
+	
+<div class="widget-social widget">
+	<h4 class="widget-social__title widget__title">Social</h4>
+	<div class="widget-social__content widget__content">
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="Twitter" rel="noopener noreferrer" href="https://twitter.com/tomwestlake121" target="_blank">
+				<svg class="widget-social__link-icon icon-twitter" viewBox="0 0 384 312" width="24" height="24" fill="#fff"><path d="m384 36.9c-14.1 6.3-29.3 10.5-45.2 12.4 16.3-9.7 28.8-25.2 34.6-43.6-15.2 9-32.1 15.6-50 19.1-14.4-15.2-34.9-24.8-57.5-24.8-43.5 0-78.8 35.3-78.8 78.8 0 6.2.7 12.2 2 17.9-65.5-3.3-123.5-34.6-162.4-82.3-6.7 11.6-10.6 25.2-10.6 39.6 0 27.3 13.9 51.4 35 65.6-12.9-.4-25.1-4-35.7-9.9v1c0 38.2 27.2 70 63.2 77.2-6.6 1.8-13.6 2.8-20.8 2.8-5.1 0-10-.5-14.8-1.4 10 31.3 39.1 54.1 73.6 54.7-27 21.1-60.9 33.7-97.8 33.7-6.4 0-12.6-.4-18.8-1.1 34.9 22.4 76.3 35.4 120.8 35.4 144.9 0 224.1-120 224.1-224.1 0-3.4-.1-6.8-.2-10.2 15.4-11.1 28.7-25 39.3-40.8z"/></svg>
+				<span>Twitter</span>
+			</a>
+		</div>
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="LinkedIn" rel="noopener noreferrer" href="https://linkedin.com/in/tomas-westlake-56484a45" target="_blank">
+				<svg class="widget-social__link-icon icon-linkedin" viewBox="0 0 352 352" width="24" height="24" fill="#fff"><path d="M0,40v272c0,21.9,18.1,40,40,40h272c21.9,0,40-18.1,40-40V40c0-21.9-18.1-40-40-40H40C18.1,0,0,18.1,0,40z M312,32 c4.6,0,8,3.4,8,8v272c0,4.6-3.4,8-8,8H40c-4.6,0-8-3.4-8-8V40c0-4.6,3.4-8,8-8H312z M59.5,87c0,15.2,12.3,27.5,27.5,27.5 c15.2,0,27.5-12.3,27.5-27.5c0-15.2-12.3-27.5-27.5-27.5C71.8,59.5,59.5,71.8,59.5,87z M187,157h-1v-21h-45v152h47v-75 c0-19.8,3.9-39,28.5-39c24.2,0,24.5,22.4,24.5,40v74h47v-83.5c0-40.9-8.7-72-56.5-72C208.5,132.5,193.3,145.1,187,157z M64,288h47.5 V136H64V288z"/></svg>
+				<span>LinkedIn</span>
+			</a>
+		</div>
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="GitHub" rel="noopener noreferrer" href="https://github.com/tomwestlake121" target="_blank">
+				<svg class="widget-social__link-icon icon-github" viewBox="0 0 384 374" width="24" height="24" fill="#fff"><path d="m192 0c-106.1 0-192 85.8-192 191.7 0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2 0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8 0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7 0 0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4 0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5 0 25.6-.2 46.3-.2 52.6 0 5.1 3.5 11.1 13.2 9.2 76.2-25.5 131.2-97.3 131.2-182 0-105.9-86-191.7-192-191.7z"/></svg>
+				<span>GitHub</span>
+			</a>
+		</div>
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="Email" href="mailto:tom.westlake121@gmail.com">
+				<svg class="widget-social__link-icon icon-mail" viewBox="0 0 416 288" width="24" height="24" fill="#fff"><path d="m0 16v256 16h16 384 16v-16-256-16h-16-384-16zm347 16-139 92.5-139-92.5zm-148 125.5 9 5.5 9-5.5 167-111.5v210h-352v-210z"/></svg>
+				<span>tom.westlake121@gmail.com</span>
+			</a>
+		</div>
+	</div>
+</div>
+	
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/data-wrangling" title="Data wrangling">Data wrangling</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/gganimate" title="Gganimate">Gganimate</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/r" title="R">R</a>
+	</div>
+</div>
+</aside>
+	</div>
+		<footer class="footer">
+			<div class="container container-inner">
+				<div class="footer__copyright">&copy; 2018 R-mageddon. <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span></div>
+			</div>
+		</footer>
+	</div>
+
+<script>
+	var navigation = responsiveNav(".menu", {
+		navClass: "menu--collapse",
+	});
+</script></body>
+</html>

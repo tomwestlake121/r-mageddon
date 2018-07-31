@@ -1,0 +1,25 @@
+---
+title: Interactive Premier League Table
+author: Tom Westlake
+date: '2018-07-31'
+slug: interactive-premier-league-table
+categories: []
+tags:
+  - gganimate
+  - R
+  - data wrangling
+description: ''
+thumbnail: ''
+---
+
+For my inaugural blog post I decided I would step into the world of animated graphics for the first time. I was inspired by the presentation that Thomas Lin Pedersen gave at the UseR! conference on [gganimate](https://www.youtube.com/watch?v=21ZWDrTukEs) and this has motivated me to attempt animating my very own first gif.
+
+So the first thing we need to do is install the relevant packages t
+
+```{r, eval = FALSE}
+library(footballR)
+library(tidyverse)
+library(gganimate)
+library(ggimage)
+```
+

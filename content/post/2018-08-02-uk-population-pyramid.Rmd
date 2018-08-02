@@ -90,7 +90,7 @@ After this it was simply a matter of turning this plot code into a function and 
 
 So I must admit, I don't quite understand all the theory behind this technique yet. But hey it works, its magic! So somehow R knows after I call the `image_graph` function to remember all the plots I make and then piece them together in order. You then call `image_animate` which formulates the gif and then save it using `image_write` when I'm making plots and seems to save them and then. Pretty cool huh. Anyway so you can see the code I used below.
 
-```{r}
+```{r, eval=F}
 
 img <- image_graph(800, 600, res = 96)
 

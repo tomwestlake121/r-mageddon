@@ -1,4 +1,4 @@
-baseurl = "r-mageddon.netlify.com"
+baseurl = ""
 title = "R-mageddon"
 languageCode = "en-us"
 paginate = "10" # Number of posts per page

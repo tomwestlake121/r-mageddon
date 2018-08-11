@@ -10,7 +10,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 [Author]
     name = "Tomas Westlake"
     bio = "Data Scientist for the UK Government"
-    avatar = "img/avatar.png"
+    avatar = "img/me.png"
 
 
 [Params]
@@ -18,7 +18,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     description = "Tom Westlake's personal blog about R related funtivities" # Description of your site
     opengraph = true
     twitter_cards = true
-    readmore = false # Show "Read more" button in list if true
+    readmore = true # Show "Read more" button in list if true
     leftsidebar = false # Move sidebar to the left side if true
     authorbox = true
     post_navigation = true
@@ -30,7 +30,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     recent_articles = true # Enable "Recent arcticles" widget
     categories = true # Enable "Categories" widget
     tags = true # Enable "Tags" widget
-        tags_counter = false # Enable counter for each tag in "Tags" widget (disabled by default)
+        tags_counter = true # Enable counter for each tag in "Tags" widget (disabled by default)
         
     
     social_twitter = "tomwestlake121"

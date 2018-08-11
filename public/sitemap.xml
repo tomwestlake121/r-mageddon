@@ -3,76 +3,23 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/r-mageddon.netlify.com/post/uk-population-pyramid/</loc>
-    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/r-mageddon.netlify.com/post/interactive-premier-league-table/</loc>
-    <lastmod>2018-07-31T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/r-mageddon.netlify.com/about/</loc>
+    <loc>/about/</loc>
     <lastmod>2018-07-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/r-mageddon.netlify.com/categories/</loc>
+    <loc>/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/r-mageddon.netlify.com/tags/data-wrangling/</loc>
-    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
+    <loc>/</loc>
+    <lastmod>2018-07-05T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/r-mageddon.netlify.com/tags/gganimate/</loc>
-    <lastmod>2018-07-31T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/r-mageddon.netlify.com/tags/magick/</loc>
-    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/r-mageddon.netlify.com/post/</loc>
-    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/r-mageddon.netlify.com/tags/r/</loc>
-    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/r-mageddon.netlify.com/</loc>
-    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/r-mageddon.netlify.com/tags/</loc>
-    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/r-mageddon.netlify.com/tags/tidyverse/</loc>
-    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/r-mageddon.netlify.com/tags/visualisation/</loc>
-    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
+    <loc>/tags/</loc>
     <priority>0</priority>
   </url>
   

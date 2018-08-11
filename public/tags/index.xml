@@ -2,68 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on R-mageddon</title>
-    <link>/r-mageddon.netlify.com/tags/</link>
+    <link>/tags/</link>
     <description>Recent content in Tags on R-mageddon</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 02 Aug 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/r-mageddon.netlify.com/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Data Wrangling</title>
-      <link>/r-mageddon.netlify.com/tags/data-wrangling/</link>
-      <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/r-mageddon.netlify.com/tags/data-wrangling/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Gganimate</title>
-      <link>/r-mageddon.netlify.com/tags/gganimate/</link>
-      <pubDate>Tue, 31 Jul 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/r-mageddon.netlify.com/tags/gganimate/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Magick</title>
-      <link>/r-mageddon.netlify.com/tags/magick/</link>
-      <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/r-mageddon.netlify.com/tags/magick/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>/r-mageddon.netlify.com/tags/r/</link>
-      <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/r-mageddon.netlify.com/tags/r/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tidyverse</title>
-      <link>/r-mageddon.netlify.com/tags/tidyverse/</link>
-      <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/r-mageddon.netlify.com/tags/tidyverse/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Visualisation</title>
-      <link>/r-mageddon.netlify.com/tags/visualisation/</link>
-      <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/r-mageddon.netlify.com/tags/visualisation/</guid>
-      <description></description>
-    </item>
     
   </channel>
 </rss>

@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Visualisation on R-mageddon</title>
-    <link>/r-mageddon.netlify.com/tags/visualisation/</link>
+    <link>/tags/visualisation/</link>
     <description>Recent content in Visualisation on R-mageddon</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 02 Aug 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/r-mageddon.netlify.com/tags/visualisation/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/visualisation/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>UK Population Pyramid</title>
-      <link>/r-mageddon.netlify.com/post/uk-population-pyramid/</link>
+      <link>/post/uk-population-pyramid/</link>
       <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>/r-mageddon.netlify.com/post/uk-population-pyramid/</guid>
+      <guid>/post/uk-population-pyramid/</guid>
       <description>On my journey to creating my animated Premier League table in my previous post, I noticed a lot of examples for creating gifs using the magick package. The gist behind the majority of these examples was to create a sequence of snapshots which could be combined together to create animations. Whilst not quite as seamless as gganimate, it appears to be much more versatile.
 So I thought I would try and make one.</description>
     </item>
     
     <item>
       <title>Interactive Premier League Table</title>
-      <link>/r-mageddon.netlify.com/post/interactive-premier-league-table/</link>
+      <link>/post/interactive-premier-league-table/</link>
       <pubDate>Tue, 31 Jul 2018 00:00:00 +0000</pubDate>
       
-      <guid>/r-mageddon.netlify.com/post/interactive-premier-league-table/</guid>
+      <guid>/post/interactive-premier-league-table/</guid>
       <description>For my inaugural blog post I decided I would step into the world of animated graphics for the first time. I was inspired by the presentation that Thomas Lin Pedersen gave at the useR! conference on gganimate and was motivated to create my very first gif.
 I rooted around for ideas and decided upon creating an animated table of the Premier League for the last season, with the clubs being depicted by their crests.</description>
     </item>

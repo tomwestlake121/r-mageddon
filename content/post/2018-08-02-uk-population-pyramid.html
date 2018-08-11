@@ -1,0 +1,110 @@
+---
+draft: yes
+title: UK Population Pyramid
+author: Tom Westlake
+date: '2018-08-02'
+slug: uk-population-pyramid
+categories: []
+tags:
+  - data wrangling
+  - R
+  - magick
+  - tidyverse
+  - visualisation
+description: ''
+thumbnail: ''
+---
+
+
+
+<p>On my journey to creating my animated Premier League table in my <a href="https://r-mageddon.netlify.com/post/interactive-premier-league-table/">previous post</a>, I noticed a lot of examples for creating gifs using the <a href="https://cran.r-project.org/web/packages/magick/magick.pdf">magick package</a>. The gist behind the majority of these examples was to create a sequence of snapshots which could be combined together to create animations. Whilst not quite as seamless as gganimate, it appears to be much more versatile.</p>
+<p>So I thought I would try and make one. I had a number of ideas, but eventually I stumbled across a <a href="https://www.ons.gov.uk/aboutus/transparencyandgovernance/freedomofinformationfoi/populationbyagegenderandethnicity">FOI request</a> that contained a great dataset containing the <a href="https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland/mid2015/ukandregionalpopulationestimates18382015.zip">population demographics</a> of the UK going back to 1970.</p>
+<p>A classic way to visualise this data is by using a population pyramid and my idea of a twist was to add an extra dimension and animate this pyramid over time.</p>
+<p>Lets load some packages.</p>
+<pre class="r"><code>library(readxl)
+library(tidyverse)
+library(ggthemes)
+library(magick)</code></pre>
+<p>Now we have all the tools needed. As the data was in a stats publication, it was fairly computer unfriendly, so a fair amount of data wrangling was required. I decided to use the Single Year of Age (SYOA) dataset for the UK 1970 - 2015. This gave a good chunky dataset to work with and yet still covers the entire UK.</p>
+<pre class="r"><code>data &lt;- 
+  ## Read the excel data in, skipping the &quot;All Ages&quot; data completely
+  read_excel(&quot;UK Population Estimates 1838-2015.xls&quot;, sheet = 4, skip = 96) %&gt;%
+  ## Filter away unnecessary data 
+  filter(!is.na(Name)) %&gt;%
+  filter(Code != &quot;Code&quot;) %&gt;%
+  filter(Age != &quot;All Ages&quot;) %&gt;%
+  ## We want a numeric column, so replaced 85 / 85+ with 85
+  mutate(Age = ifelse(Age == &quot;85 / 85+&quot;, 85, Age)) %&gt;%
+  ## We group by age, as it is replicated across the two genders, and we can use this to distinguish one from the other
+  group_by(Age) %&gt;%
+  mutate(gender = 1:n()) %&gt;%
+  mutate(gender = ifelse(gender == 1, &quot;Male&quot;, &quot;Female&quot;)) %&gt;%
+  ungroup() %&gt;%
+  ## Gather all the variable columns into one year variable to make this a tidy dataset
+  gather(year, pop, 4:48) %&gt;%
+  ## Only keep the last 4 characters to give us a year, which we can convert to numeric
+  mutate(year = as.numeric(str_sub(year, -4))) %&gt;%
+  mutate(age = as.numeric(Age), Age = NULL) %&gt;%
+  mutate(pop = as.numeric(pop)) %&gt;%
+  ## Make the Male population negative so we can use this in our ggplot
+  mutate(pop = ifelse(gender == &quot;Male&quot;, 0-pop, pop)) %&gt;%
+  mutate(pop_m = pop/10^6)</code></pre>
+<p>Now we have a nice tidy dataset of UK population demographics over the past 30 years. Next we need to create a population pyramid from our data. Google gave me plenty of examples to follow but I found this <a href="http://marquess.me/2018/04/14/population_pyramids.html">one</a> particularly helpful.</p>
+<p>However my first attempt didn’t go so well…</p>
+<div class="figure">
+<img src="/img/LOL.png" alt="Pyramid Fail" />
+<p class="caption">Pyramid Fail</p>
+</div>
+<p>I finally got there however</p>
+<div class="figure">
+<img src="/img/1971.png" alt="1971 UK Population Pyramid" />
+<p class="caption">1971 UK Population Pyramid</p>
+</div>
+<p>Using the following <code>ggplot2</code> code</p>
+<pre class="r"><code>data %&gt;%
+    filter(year == 1971) %&gt;%
+    ggplot(aes(x = age, y = pop_m, fill = gender)) +   
+    geom_col(width = .85) +   
+    scale_y_continuous(breaks = seq(-1,1,0.1),labels = c(10:0, 1:10)) +
+    coord_flip() + 
+    scale_x_continuous(breaks = seq(0, 100, 10), labels = seq(0, 100, 10)) +
+    labs(title=paste0(&quot;UK Population in &quot;, x), y = &quot;Population (100,000s)&quot;, x = &quot;Age&quot;, caption = &quot;Source: ONS   Chart by @tomwestlake121&quot;) +
+    theme(plot.title = element_text(hjust = .5),
+          axis.ticks = element_blank()) +   
+    scale_fill_manual(values=c(&quot;red&quot;, &quot;navy&quot;)) +
+    theme_tufte(base_size = 12, base_family=&quot;Avenir&quot;) </code></pre>
+<p>After this it was simply a matter of turning this plot code into a function and adding the necessary <code>magick</code> parts! I followed the example found within the magick introduction vignettes, within the <a href="https://cran.r-project.org/web/packages/magick/vignettes/intro.html#animation">animation section</a></p>
+<p>So I must admit, I don’t quite understand all the theory behind this technique yet. But hey it works, its magic! So somehow R knows after I call the <code>image_graph</code> function to remember all the plots I make and then piece them together in order. You then call <code>image_animate</code> which formulates the gif and then save it using <code>image_write</code> when I’m making plots and seems to save them and then. Pretty cool huh. Anyway so you can see the code I used below.</p>
+<pre class="r"><code>img &lt;- image_graph(800, 600, res = 96)
+
+pyramid_plot&lt;- function(x){
+  p &lt;- data %&gt;%
+    filter(year == x) %&gt;%
+    ggplot(aes(x = age, y = pop_m, fill = gender)) +   # Fill column
+    geom_col(width = .85) +   # draw the bars
+    scale_y_continuous(breaks = seq(-1,1,0.1),labels = c(10:0, 1:10)) +
+    
+    coord_flip() +  # Flip axes
+    scale_x_continuous(breaks = seq(0, 100, 10), labels = seq(0, 100, 10)) +
+    labs(title=paste0(&quot;UK Population in &quot;, x), y = &quot;Population (100,000s)&quot;, x = &quot;Age&quot;, caption = &quot;Source: ONS   Chart by @tomwestlake121&quot;) +
+    theme(plot.title = element_text(hjust = .5),
+          axis.ticks = element_blank()) +   # Centre plot title
+    scale_fill_manual(values=c(&quot;red&quot;, &quot;navy&quot;)) +
+    theme_tufte(base_size = 12, base_family=&quot;Avenir&quot;) #+ transition_manual(year)#
+  p
+}
+map(1971:2015, pyramid_plot)
+dev.off()
+animation &lt;- image_animate(img, fps = 5)
+image_write(animation, &quot;tom-uk-pyramid-5 fps.gif&quot;)</code></pre>
+<p>And the final product:</p>
+<div class="figure">
+<img src="/img/tom-uk-pyramid-5%20fps.gif" alt="Animated UK Population Pyramid" />
+<p class="caption">Animated UK Population Pyramid</p>
+</div>
+<p>In conclusion, after I got my head around the magic happening and just accepted it, it followed quite a logical process. I particularly like how easy it was to alter parameters such as fps, resolution and the dimensions. These will obviously exist within the gganimate package, I just need to spend more time familiarising myself with the lexicon.</p>
+<p>P.S. The keen-eyed among you will notice a weird data anomaly in the 1980s, for the 80-90 age group. This was because the data stopped at 85 years of age within this time period and I fudged a correction into the data to make the animation appear more seamless. The actual animation should look like below, but I found this to be quite jarring:</p>
+<div class="figure">
+<img src="/img/uk-pyramid.gif" alt="Alternative Pyramid" />
+<p class="caption">Alternative Pyramid</p>
+</div>

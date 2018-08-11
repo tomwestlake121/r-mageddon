@@ -5,7 +5,6 @@ paginate = "10" # Number of posts per page
 theme = "Mainroad"
 disqusShortname = "R-Mageddon" # Enable comments by entering your Disqus shortname
 googleAnalytics = "UA-123754356-1" # Enable Google Analytics by entering your tracking id
-ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [Author]
     name = "Tomas Westlake"

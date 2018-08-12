@@ -1,0 +1,153 @@
+---
+title: The Burger King Pandemic
+author: ''
+date: '2018-08-12'
+slug: the-burger-king-pandemic
+categories: []
+tags:
+  - data wrangling
+  - R
+  - visualisation
+  - tidyverse
+  - gifski
+  - animation
+  - rvest
+  - glue
+  - geospatial
+description: ''
+thumbnail: ''
+---
+
+Whilst I was rooting around for inspiration, my girlfriend suggested I should do a post about food, quickly followed up by "burgers!!!". So a few google searches later and I decided to create an animated map, showing all the countries of the world that had at least one Burger King store.
+
+I'm particularly chuffed that I've managed to combine a multitude of really cool packages in this post. We've got:
+
+* Data scraped off Wikipedia using the `rvest` [package](https://cran.r-project.org/web/packages/rvest/rvest.pdf) in conjunction with the `purr` [package](https://cran.r-project.org/web/packages/purrr/purrr.pdf).
+* Some classic data manipulation using the wonders of the [tidyverse](https://www.tidyverse.org/)
+* Using the `glue` [package](https://cran.r-project.org/web/packages/glue/glue.pdf) to format and interpolate strings.
+* Creating a geospatial visualisation using the new `ggplot2` [release](https://ggplot2.tidyverse.org/), with the `sf` [package](https://cran.r-project.org/web/packages/sf/sf.pdf) and obtaining data from the `rnaturalearth` [package](https://cran.r-project.org/web/packages/rnaturalearth/README.html).
+* Animating the visualisation using the `gifski` [package](https://cran.r-project.org/web/packages/gifski/gifski.pdf)
+
+Ok so lets get started.
+
+```{r}
+library(tidyverse)
+library(rvest)
+library(sf)
+library(glue)
+library(rnaturalearth)
+library(gifski)
+```
+
+
+Firstly I've located the data I want, a Wikipedia [page](https://en.wikipedia.org/wiki/List_of_countries_with_Burger_King_franchises) that lists the countries with Burger King franchises. 
+
+```{r}
+url <- "https://en.wikipedia.org/wiki/List_of_countries_with_Burger_King_franchises"
+```
+
+Now to scrape the data from each table we need to know the Xpath or CSS selector. Normally I would use the Selector Gadget chrome addin to get the selector, (à la this [blog](http://categitau.com/using-rvest-to-scrape-data-from-wikipedia/)), but I couldn't get it to work. So I inspected the element of the first table and got `'//*[@id="mw-content-text"]/div/table[2]')`. A quick scroll down and I figured out I want tables 2 - 8. So to iterate through these 7 tables, I constructed a function to extract the data. 
+
+```{r}
+extract_table_df <- function(table_no){
+  table <- url %>%
+    read_html() %>%
+    html_nodes(xpath = glue('//*[@id="mw-content-text"]/div/table[{table_no}]')) %>%
+    html_table()
+  table_df <- table[[1]] %>%
+    mutate(Yearentered = as.character(Yearentered))
+}
+```
+
+Now we can use this function combined with the `purrr` function `map_dfr` to iterate through the 8 tables and bind them together.
+
+```{r}
+data <- map_dfr(2:8, extract_table_df)
+data
+```
+
+A quick inspection of the data shows a few things. We have unexpectedly brought the reference numbers with us, which makes the year column wrong and some tables had country/territory, whilst others simply contained country. And some observations have no year at all.
+
+So lets fix that!
+
+```{r}
+tidy_data <- data %>%
+  mutate(country = ifelse(is.na(Country), `Country/territory`, Country)) %>%
+  mutate(year = as.numeric(str_sub(Yearentered, end=4))) %>%
+  filter(!is.na(year))
+```
+
+Now we have the data as we need it, right?
+
+Lets now get the spatial data we need to plot the results. This comes from the very handy `rnaturalearth` package.
+
+```{r}
+countries_sf <- ne_countries(scale = "medium", returnclass = "sf")
+glimpse(countries_sf)
+```
+
+A quick glimpse at the data shows a `name_en` variable that should hopefully match with our `country` variable in our previous dataset. However what if some of the country names don't match up? 
+
+```{r}
+mismatches <- tidy_data %>%
+  anti_join(countries_sf, by  = c("country" = "name_en"))
+mismatches
+```
+
+Uh-oh, 4 countries don't match up. As its a small amount it seemed appropriate to define a new dataset for these countries. 
+
+```{r}
+country_match <- tribble(
+  ~country, ~sf_country,
+  "United States", "United States of America",
+  "Macedonia", "Republic of Macedonia",
+  "Timor-Leste", "East Timor",
+  "China", "People's Republic of China")
+country_match
+```
+
+We can now completely join the spatial data to the important data.
+
+```{r}
+joined_data <- 
+  tidy_data %>%
+  left_join(country_match) %>%
+  mutate(country = ifelse(is.na(sf_country), country, sf_country)) %>%
+  left_join(countries_sf,  by  = c("country" = "name_en"))
+```
+
+Now we have all of data in one dataframe!
+
+Firstly lets show a quick plot of the countries, using ggplot and sf.
+
+```{r}
+ggplot() + geom_sf(data = countries_sf) 
+```
+
+And now lets pull all the pieces together.
+
+```{r, eval = FALSE}
+plot_fun <- function(open_year){
+p <- ggplot() + geom_sf(data = filter(countries_sf, name_en != "Antarctica")) + 
+  geom_sf(data = filter(tidy_data3, year <= open_year), aes(fill = rgb(236, 28, 36, maxColorValue = 255))) + 
+  theme_void() + coord_sf(datum=NA) + guides(fill=FALSE) + 
+  labs(title = glue("    Countries with a Burger King, year: {open_year}"),
+       subtitle = glue("      Count of countries: {nrow(filter(tidy_data3, year <= open_year))}"))
+print(p)
+}
+```
+
+```{r, eval = FALSE}
+save_gif(walk(min(tidy_data3$year):max(tidy_data3$year), plot_fun), delay = 0.5, gif_file = "animation.gif")
+```
+
+And we get the final output:
+
+![Burger King Animation](/img/bk.gif)
+
+
+P.S. I did quickly briefly add in a `transition_time(year)` using gganimate, just to experiment and see what happenes. Surprisingly it did make something!
+
+![](/img/bk2.gif)
+
+

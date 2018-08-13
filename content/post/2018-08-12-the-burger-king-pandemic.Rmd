@@ -74,7 +74,8 @@ So lets fix that!
 tidy_data <- data %>%
   mutate(country = ifelse(is.na(Country), `Country/territory`, Country)) %>%
   mutate(year = as.numeric(str_sub(Yearentered, end=4))) %>%
-  filter(!is.na(year))
+  filter(!is.na(year)) %>%
+  select(-Notes)
 ```
 
 Now we have the data as we need it, right?

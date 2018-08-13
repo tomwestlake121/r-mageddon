@@ -62,7 +62,8 @@ glimpse(data)</code></pre>
 <pre class="r"><code>tidy_data &lt;- data %&gt;%
   mutate(country = ifelse(is.na(Country), `Country/territory`, Country)) %&gt;%
   mutate(year = as.numeric(str_sub(Yearentered, end=4))) %&gt;%
-  filter(!is.na(year))</code></pre>
+  filter(!is.na(year)) %&gt;%
+  select(-Notes)</code></pre>
 <p>Now we have the data as we need it, right?</p>
 <p>Lets now get the spatial data we need to plot the results. This comes from the very handy <code>rnaturalearth</code> package.</p>
 <pre class="r"><code>countries_sf &lt;- ne_countries(scale = &quot;medium&quot;, returnclass = &quot;sf&quot;)</code></pre>
@@ -70,21 +71,16 @@ glimpse(data)</code></pre>
 <pre class="r"><code>mismatches &lt;- tidy_data %&gt;%
   anti_join(countries_sf, by  = c(&quot;country&quot; = &quot;name_en&quot;))
 mismatches</code></pre>
-<pre><code>##   Country/territory Yearentered        Masterfranchisee
-## 1              &lt;NA&gt;        2005                        
-## 2              &lt;NA&gt;        2013     Fast Food Timor Lda
-## 3         Macedonia        2011                TAB Gida
-## 4     United States    19541957 Burger King Corporation
-##                                                                                                                                       Notes
-## 1                                                         &lt;U+6C49&gt;&lt;U+5821&gt;&lt;U+738B&gt; (in Chinese)12,000th location opened in Beijing.[36][37]
-## 2                                                                                                                                          
-## 3 The first Burger King restaurant in the Republic of Macedonia was opened in August 2011, and is located at the Skopje airport. 5 outlets.
-## 4                                                                Founded as Insta-Burger King in 1954; purchased in 1957 by current company
-##       Country       country year
-## 1       China         China 2005
-## 2 Timor-Leste   Timor-Leste 2013
-## 3        &lt;NA&gt;     Macedonia 2011
-## 4        &lt;NA&gt; United States 1954</code></pre>
+<pre><code>##   Country/territory Yearentered        Masterfranchisee     Country
+## 1              &lt;NA&gt;        2005                               China
+## 2              &lt;NA&gt;        2013     Fast Food Timor Lda Timor-Leste
+## 3         Macedonia        2011                TAB Gida        &lt;NA&gt;
+## 4     United States    19541957 Burger King Corporation        &lt;NA&gt;
+##         country year
+## 1         China 2005
+## 2   Timor-Leste 2013
+## 3     Macedonia 2011
+## 4 United States 1954</code></pre>
 <p>Uh-oh, 4 countries don’t match up. As its a small amount it seemed appropriate to define a new dataset for these countries.</p>
 <pre class="r"><code>country_match &lt;- tribble(
   ~country, ~sf_country,

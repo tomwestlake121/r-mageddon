@@ -30,7 +30,7 @@ I'm particularly chuffed that I've managed to combine a multitude of really cool
 
 Ok so lets get started.
 
-```{r}
+```{r, message=FALSE}
 library(tidyverse)
 library(rvest)
 library(sf)
@@ -83,7 +83,6 @@ Lets now get the spatial data we need to plot the results. This comes from the v
 
 ```{r}
 countries_sf <- ne_countries(scale = "medium", returnclass = "sf")
-glimpse(countries_sf)
 ```
 
 A quick glimpse at the data shows a `name_en` variable that should hopefully match with our `country` variable in our previous dataset. However what if some of the country names don't match up? 
@@ -108,7 +107,7 @@ country_match
 
 We can now completely join the spatial data to the important data.
 
-```{r}
+```{r, message = FALSE}
 joined_data <- 
   tidy_data %>%
   left_join(country_match) %>%

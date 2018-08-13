@@ -63,7 +63,7 @@ Now we can use this function combined with the `purrr` function `map_dfr` to ite
 
 ```{r}
 data <- map_dfr(2:8, extract_table_df)
-data
+glimpse(data)
 ```
 
 A quick inspection of the data shows a few things. We have unexpectedly brought the reference numbers with us, which makes the year column wrong and some tables had country/territory, whilst others simply contained country. And some observations have no year at all.

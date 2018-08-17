@@ -80,7 +80,10 @@ if (!doNotTrack) {
 			<h1 class="post__title">UK Population Pyramid</h1><div class="post__meta meta">
 <svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
 <time class="post__meta-date meta-date" datetime="2018-08-02T00:00:00">August 02, 2018</time></div>
-		</header><div class="post__content clearfix">
+		</header>
+		<figure class="post__thumbnail">
+			<img src="/img/tom-uk-pyramid-5%20fps.gif" alt="UK Population Pyramid">
+		</figure><div class="post__content clearfix">
 			<p>On my journey to creating my animated Premier League table in my <a href="https://r-mageddon.netlify.com/post/interactive-premier-league-table/">previous post</a>, I noticed a lot of examples for creating gifs using the <a href="https://cran.r-project.org/web/packages/magick/magick.pdf">magick package</a>. The gist behind the majority of these examples was to create a sequence of snapshots which could be combined together to create animations. Whilst not quite as seamless as gganimate, it appears to be much more versatile.</p>
 <p>So I thought I would try and make one. I had a number of ideas, but eventually I stumbled across a <a href="https://www.ons.gov.uk/aboutus/transparencyandgovernance/freedomofinformationfoi/populationbyagegenderandethnicity">FOI request</a> that contained a great dataset containing the <a href="https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland/mid2015/ukandregionalpopulationestimates18382015.zip">population demographics</a> of the UK going back to 1970.</p>
 <p>A classic way to visualise this data is by using a population pyramid and my idea of a twist was to add an extra dimension and animate this pyramid over time.</p>

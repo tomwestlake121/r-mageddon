@@ -80,7 +80,10 @@ if (!doNotTrack) {
 			<h1 class="post__title">Interactive Premier League Table</h1><div class="post__meta meta">
 <svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
 <time class="post__meta-date meta-date" datetime="2018-07-31T00:00:00">July 31, 2018</time></div>
-		</header><div class="post__content clearfix">
+		</header>
+		<figure class="post__thumbnail">
+			<img src="/img/final_animated_prem_table.gif" alt="Interactive Premier League Table">
+		</figure><div class="post__content clearfix">
 			<p>For my inaugural blog post I decided I would step into the world of animated graphics for the first time. I was inspired by the <a href="(https://www.youtube.com/watch?v=21ZWDrTukEs)">presentation</a> that Thomas Lin Pedersen gave at the <a href="https://user2018.r-project.org/">useR!</a> conference on <a href="https://github.com/thomasp85/gganimate">gganimate</a> and was motivated to create my very first gif.</p>
 <p>I rooted around for ideas and decided upon creating an animated table of the Premier League for the last season, with the clubs being depicted by their crests. A quick google pointed me towards a <a href="https://www.football-data.org/">free football API</a> and that was already an <a href="https://github.com/dashee87/footballR">R package</a> to interface with this API. NB: This API has since been updated to v2, which isn’t currently supported by the linked package, but is perfectly fine for the historical dataset I wished to extract.</p>
 <p>So the first thing we need to do is install and load the relevant packages:</p>

@@ -15,7 +15,7 @@ tags:
   - ggplot2
   - readxl     
 description: ''
-thumbnail: ''
+thumbnail: 'img/tom-uk-pyramid-5 fps.gif'
 ---
 
 On my journey to creating my animated Premier League table in my [previous post](https://r-mageddon.netlify.com/post/interactive-premier-league-table/), I noticed a lot of examples for creating gifs using the [magick package](https://cran.r-project.org/web/packages/magick/magick.pdf). The gist behind the majority of these examples was to create a sequence of snapshots which could be combined together to create animations. Whilst not quite as seamless as gganimate, it appears to be much more versatile.

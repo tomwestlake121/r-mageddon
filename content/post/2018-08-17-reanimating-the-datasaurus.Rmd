@@ -11,7 +11,7 @@ tags:
   - visualisation
   - intermediate
 description: ''
-thumbnail: ''
+thumbnail: "img/Datasaurus.gif"
 ---
 
 Whilst browsing twitter last night I came upon this tweet by the currrent author of `gganimate`:

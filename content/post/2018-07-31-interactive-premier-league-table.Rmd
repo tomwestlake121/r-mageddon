@@ -14,7 +14,7 @@ tags:
   - animation
   - ggplot2    
 description: ''
-thumbnail: ''
+thumbnail: 'img/final_animated_prem_table.gif'
 ---
 
 For my inaugural blog post I decided I would step into the world of animated graphics for the first time. I was inspired by the [presentation]((https://www.youtube.com/watch?v=21ZWDrTukEs)) that Thomas Lin Pedersen gave at the [useR!](https://user2018.r-project.org/) conference on [gganimate](https://github.com/thomasp85/gganimate) and was motivated to create my very first gif.

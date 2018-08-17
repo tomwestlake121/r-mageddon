@@ -12,9 +12,18 @@
     
     
     <item>
+      <title>Advanced</title>
+      <link>/tags/advanced/</link>
+      <pubDate>Sun, 12 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/advanced/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Animation</title>
       <link>/tags/animation/</link>
-      <pubDate>Sun, 12 Aug 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 17 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/animation/</guid>
       <description></description>
@@ -41,9 +50,18 @@
     <item>
       <title>Gganimate</title>
       <link>/tags/gganimate/</link>
-      <pubDate>Tue, 31 Jul 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 17 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/gganimate/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ggplot2</title>
+      <link>/tags/ggplot2/</link>
+      <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/ggplot2/</guid>
       <description></description>
     </item>
     
@@ -66,6 +84,15 @@
     </item>
     
     <item>
+      <title>Intermediate</title>
+      <link>/tags/intermediate/</link>
+      <pubDate>Fri, 17 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/intermediate/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Magick</title>
       <link>/tags/magick/</link>
       <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
@@ -77,9 +104,18 @@
     <item>
       <title>R</title>
       <link>/tags/r/</link>
-      <pubDate>Sun, 12 Aug 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 17 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Readxl</title>
+      <link>/tags/readxl/</link>
+      <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/readxl/</guid>
       <description></description>
     </item>
     
@@ -89,6 +125,15 @@
       <pubDate>Sun, 12 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/rvest/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sf</title>
+      <link>/tags/sf/</link>
+      <pubDate>Sun, 12 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/sf/</guid>
       <description></description>
     </item>
     
@@ -104,7 +149,7 @@
     <item>
       <title>Visualisation</title>
       <link>/tags/visualisation/</link>
-      <pubDate>Sun, 12 Aug 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 17 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/visualisation/</guid>
       <description></description>

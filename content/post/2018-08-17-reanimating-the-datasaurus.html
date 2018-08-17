@@ -1,0 +1,45 @@
+---
+title: Reanimating the Datasaurus
+author: ''
+date: '2018-08-17'
+slug: reanimating-the-datasaurus
+categories: []
+tags:
+  - animation
+  - gganimate
+  - R
+  - visualisation
+  - intermediate
+description: ''
+thumbnail: ''
+---
+
+
+
+<p>Whilst browsing twitter last night I came upon this tweet by the currrent author of <code>gganimate</code>:</p>
+<blockquote class="twitter-tweet" data-lang="en">
+<p lang="en" dir="ltr">
+I've started a gganimate wiki page in order to collect examples. If you want to showcase your animations and help others learn in the process, consider submitting an issue as described on the main page <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://t.co/VrT5IV2izr">https://t.co/VrT5IV2izr</a>
+</p>
+— Thomas Lin Pedersen (<span class="citation">@thomasp85</span>) <a href="https://twitter.com/thomasp85/status/1030007417927434240?ref_src=twsrc%5Etfw">August 16, 2018</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>Now I’ve been experimenting a lot with creating animations with R, and I absolutely love using <code>gganimate</code> . So I thought, what a great opportunity to make a minor contribution back.</p>
+<p>So I trialled a few ideas. My first one was actually trying to visualise the results from the last 5 world cups, combining <code>gganimate</code> with <code>geom_sf</code>. This didn’t work out too well… <img src="/img/world_cup_fail.gif" /></p>
+<p>So I retreated back into the mind palace and remembered seeing a really cool animation about a year ago of a Datasaurus. A google search later I come across this <a href="http://blog.revolutionanalytics.com/2017/05/the-datasaurus-dozen.html">blog</a> which explains the history behind the ‘Datasaurus Dozen’.</p>
+<p>Essentially the Datasaurus Dozen is a playful twist on the classic statistical dataset; <a href="https://en.wikipedia.org/wiki/Anscombe%27s_quartet">Anscombe’s Quartet</a>. The Datasaurus Dozen is a group of twelve datasets, with nigh-identical summary statistics, but when plotted on a graph they prove to be distinctly dissimilar. Imagine my delight when I found the Datasaurus Dozen was available on CRAN in the <code>datasauRus</code> <a href="https://cran.r-project.org/web/packages/datasauRus/index.html">package</a>.</p>
+<p>It turned out that creating an animated version of the Datasaurus Dozen was absurdly simple, taking only 4 lines of code.</p>
+<pre class="r"><code>library(datasauRus)
+library(ggplot2)
+library(gganimate)
+
+ggplot(datasaurus_dozen, aes(x=x, y=y))+
+  geom_point()+
+  theme_minimal() +
+  transition_states(dataset, 3, 1)</code></pre>
+<div class="figure">
+<img src="/img/Datasaurus.gif" />
+
+</div>
+<p>This to me displays the brilliance of <code>gganimate</code> and a testament to Thomas’ unwavering focus on the grammar and API of the package. David Robinson summed it up best with “An amazing example of how gganimate lets you accomplish so much with so little.”</p>
+<p>I’m not going to lie, I’m also pretty chuffed its now an example on the gganimate <a href="https://github.com/thomasp85/gganimate/wiki/The-Datasaurus-Dozen">github page</a>!! :):)</p>

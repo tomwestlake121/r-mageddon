@@ -10,6 +10,9 @@ tags:
   - data wrangling
   - tidyverse
   - visualisation
+  - advanced  
+  - animation
+  - ggplot2    
 description: ''
 thumbnail: ''
 ---

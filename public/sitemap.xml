@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/post/reanimating-the-datasaurus/</loc>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/post/the-burger-king-pandemic/</loc>
     <lastmod>2018-08-12T00:00:00+00:00</lastmod>
   </url>
@@ -23,8 +28,14 @@
   </url>
   
   <url>
-    <loc>/tags/animation/</loc>
+    <loc>/tags/advanced/</loc>
     <lastmod>2018-08-12T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/animation/</loc>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -47,7 +58,13 @@
   
   <url>
     <loc>/tags/gganimate/</loc>
-    <lastmod>2018-07-31T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/ggplot2/</loc>
+    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -64,6 +81,12 @@
   </url>
   
   <url>
+    <loc>/tags/intermediate/</loc>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/magick/</loc>
     <lastmod>2018-08-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -71,24 +94,36 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2018-08-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/r/</loc>
-    <lastmod>2018-08-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2018-08-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/readxl/</loc>
+    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/rvest/</loc>
+    <lastmod>2018-08-12T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/sf/</loc>
     <lastmod>2018-08-12T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -107,7 +142,7 @@
   
   <url>
     <loc>/tags/visualisation/</loc>
-    <lastmod>2018-08-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

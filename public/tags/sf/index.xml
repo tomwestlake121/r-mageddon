@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Sf on R-mageddon</title>
+    <link>/tags/sf/</link>
+    <description>Recent content in Sf on R-mageddon</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 12 Aug 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/sf/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>The Burger King Pandemic</title>
+      <link>/post/the-burger-king-pandemic/</link>
+      <pubDate>Sun, 12 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/the-burger-king-pandemic/</guid>
+      <description>Whilst I was rooting around for inspiration, my girlfriend suggested I should do a post about food, quickly followed up by “burgers!!!”. So a few google searches later and I decided to create an animated map, showing all the countries of the world that had at least one Burger King store.
+I’m particularly chuffed that I’ve managed to combine a multitude of really cool packages in this post. We’ve got:</description>
+    </item>
+    
+  </channel>
+</rss>

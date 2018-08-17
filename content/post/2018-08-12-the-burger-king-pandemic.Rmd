@@ -96,6 +96,14 @@ mismatches
 
 Uh-oh, 4 countries don't match up. As its a small amount it seemed appropriate to define a new dataset for these countries. 
 
+Ok so what are the names used within `countries_sf` dataframe?
+
+```{r}
+unique(countries_sf$name_en)
+```
+
+We can see from this that the countries do exist within the dataset, they just need renaming. So lets define this new dataset.
+
 ```{r}
 country_match <- tribble(
   ~country, ~sf_country,
@@ -128,17 +136,24 @@ And now lets pull all the pieces together.
 
 ```{r, eval = FALSE}
 plot_fun <- function(open_year){
-p <- ggplot() + geom_sf(data = filter(countries_sf, name_en != "Antarctica")) + 
-  geom_sf(data = filter(tidy_data3, year <= open_year), aes(fill = rgb(236, 28, 36, maxColorValue = 255))) + 
+p <- ggplot() + 
+  ## Add the background countries, but filter away Antarctica because it is unecessary.
+  geom_sf(data = filter(countries_sf, name_en != "Antarctica")) + 
+  ## Add the countries data, filtering so countries only appear after the first burger king has opened
+  geom_sf(data = filter(joined_data, year <= open_year), fill = rgb(236, 28, 36, maxColorValue = 255)) + 
+  ## Change the theme so we don't get a background plot or axes. The coord_sf part is a workaround to a current bug that makes gridlines appear.
   theme_void() + coord_sf(datum=NA) + guides(fill=FALSE) + 
+  ## Stitch the year to the title with glue
   labs(title = glue("    Countries with a Burger King, year: {open_year}"),
-       subtitle = glue("      Count of countries: {nrow(filter(tidy_data3, year <= open_year))}"))
+       subtitle = glue("      Count of countries: {nrow(filter(joined_data, year <= open_year))}"))
 print(p)
 }
 ```
 
+Now to save the gif to our working directory.
+
 ```{r, eval = FALSE}
-save_gif(walk(min(tidy_data3$year):max(tidy_data3$year), plot_fun), delay = 0.5, gif_file = "animation.gif")
+save_gif(walk(min(joined_data$year):max(joined_data$year), plot_fun), delay = 0.5, gif_file = "animation.gif")
 ```
 
 And we get the final output:

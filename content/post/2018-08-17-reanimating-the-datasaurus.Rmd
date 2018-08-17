@@ -44,7 +44,9 @@ ggplot(datasaurus_dozen, aes(x=x, y=y))+
 
 ![](/img/Datasaurus.gif)
 
-This to me displays  the brilliance of `gganimate` and a testament to Thomas' unwavering focus on the grammar and API of the package. David Robinson summed it up best with "An amazing example of how gganimate lets you accomplish so much with so little." 
+It seems crazy to me that all these datasets have the same means, standard deviations and correlations!
+
+I think this example also displays the brilliance of `gganimate` and a testament to Thomas' unwavering focus on the grammar and API of the package. David Robinson summed it up best with "An amazing example of how gganimate lets you accomplish so much with so little." 
 
 I'm not going to lie, I'm also pretty chuffed its now an example on the gganimate [github page](https://github.com/thomasp85/gganimate/wiki/The-Datasaurus-Dozen)!! :):)
 

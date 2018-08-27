@@ -4,17 +4,21 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Advanced</title>
+	<title>Writing an R package from scratch</title>
 	<meta name="description" content="">
 	<meta name="generator" content="Hugo 0.46" />
-	<meta property="og:title" content="Advanced" />
-<meta property="og:description" content="Tom Westlake&#39;s personal blog about R related funtivities" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="/tags/advanced/" />
+	<meta property="og:title" content="Writing an R package from scratch" />
+<meta property="og:description" content="Anyone who has created their own R package has probably come across Hilary Parker’s awesome blogpost, that walks you through creating your very first R package. The comprehensive detail on everything R packages can be found in Hadley Wickham’s superb book.
+In this post I am going to walk through some of the developments in the package development space since Hilary wrote her blog four years ago, in particular focussing on the relatively recent usethis package." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/writing-an-r-package-from-scratch/" />
 
 
 
-<meta property="og:updated_time" content="2018-08-12T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2018-08-26T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2018-08-26T00:00:00&#43;00:00"/>
+
 
 
 
@@ -26,12 +30,12 @@
 
 
 	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Advanced"/>
-<meta name="twitter:description" content="Tom Westlake&#39;s personal blog about R related funtivities"/>
+<meta name="twitter:title" content="Writing an R package from scratch"/>
+<meta name="twitter:description" content="Anyone who has created their own R package has probably come across Hilary Parker’s awesome blogpost, that walks you through creating your very first R package. The comprehensive detail on everything R packages can be found in Hadley Wickham’s superb book.
+In this post I am going to walk through some of the developments in the package development space since Hilary wrote her blog four years ago, in particular focussing on the relatively recent usethis package."/>
 
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
 	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="alternate" type="application/rss&#43;xml" href="/tags/advanced/index.xml">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
 	<link rel="stylesheet" href="/css/style.css">
 	<script type="text/javascript" src="/js/scripts.js"></script>
@@ -70,79 +74,117 @@ if (!doNotTrack) {
 		</header>
 		<div class="wrapper clearfix">
 
-	<main class="main list content" role="main">
-		<header class="page-header">
-			<h1 class="page-header__title">Advanced</h1>
-		</header><article class="list__item post">
-	<figure class="list__thumbnail">
-		<a href="/post/the-burger-king-pandemic/">
-			<img src="/img/bk.gif" alt="The Burger King Pandemic" />
-		</a>
-	</figure>
-	<div class="list__content clearfix">
-		<header class="list__header">
-			<h3 class="list__title post__title ">
-				<a href="/post/the-burger-king-pandemic/" rel="bookmark">The Burger King Pandemic</a>
-			</h3><div class="list__meta meta">
+<main class="main content">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Writing an R package from scratch</h1><div class="post__meta meta">
 <svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
-<time class="post__meta-date meta-date" datetime="2018-08-12T00:00:00">August 12, 2018</time></div>
+<time class="post__meta-date meta-date" datetime="2018-08-26T00:00:00">August 26, 2018</time></div>
 		</header>
-		<div class="list__excerpt post__content">
-			Whilst I was rooting around for inspiration, my girlfriend suggested I should do a post about food, quickly followed up by “burgers!!!”. So a few google searches later and I decided to create an animated map, showing all the countries of the world that had at least one Burger King store.
-I’m particularly chuffed that I’ve managed to combine a multitude of really cool packages in this post. We’ve got:
-		</div>
-		<div class="list__footer">
-			<a class="list__footer-readmore btn" href="/post/the-burger-king-pandemic/">Read more…</a>
-		</div>
-	</div>
-</article><article class="list__item post">
-	<figure class="list__thumbnail">
-		<a href="/post/uk-population-pyramid/">
-			<img src="/img/tom-uk-pyramid-5%20fps.gif" alt="UK Population Pyramid" />
-		</a>
-	</figure>
-	<div class="list__content clearfix">
-		<header class="list__header">
-			<h3 class="list__title post__title ">
-				<a href="/post/uk-population-pyramid/" rel="bookmark">UK Population Pyramid</a>
-			</h3><div class="list__meta meta">
-<svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
-<time class="post__meta-date meta-date" datetime="2018-08-02T00:00:00">August 02, 2018</time></div>
-		</header>
-		<div class="list__excerpt post__content">
-			On my journey to creating my animated Premier League table in my previous post, I noticed a lot of examples for creating gifs using the magick package. The gist behind the majority of these examples was to create a sequence of snapshots which could be combined together to create animations. Whilst not quite as seamless as gganimate, it appears to be much more versatile.
-So I thought I would try and make one.
-		</div>
-		<div class="list__footer">
-			<a class="list__footer-readmore btn" href="/post/uk-population-pyramid/">Read more…</a>
-		</div>
-	</div>
-</article><article class="list__item post">
-	<figure class="list__thumbnail">
-		<a href="/post/interactive-premier-league-table/">
-			<img src="/img/final_animated_prem_table.gif" alt="Interactive Premier League Table" />
-		</a>
-	</figure>
-	<div class="list__content clearfix">
-		<header class="list__header">
-			<h3 class="list__title post__title ">
-				<a href="/post/interactive-premier-league-table/" rel="bookmark">Interactive Premier League Table</a>
-			</h3><div class="list__meta meta">
-<svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
-<time class="post__meta-date meta-date" datetime="2018-07-31T00:00:00">July 31, 2018</time></div>
-		</header>
-		<div class="list__excerpt post__content">
-			For my inaugural blog post I decided I would step into the world of animated graphics for the first time. I was inspired by the presentation that Thomas Lin Pedersen gave at the useR! conference on gganimate and was motivated to create my very first gif.
-I rooted around for ideas and decided upon creating an animated table of the Premier League for the last season, with the clubs being depicted by their crests.
-		</div>
-		<div class="list__footer">
-			<a class="list__footer-readmore btn" href="/post/interactive-premier-league-table/">Read more…</a>
-		</div>
-	</div>
-</article>
+		<figure class="post__thumbnail">
+			<img src="/img/dogs_hex.png" alt="Writing an R package from scratch">
+		</figure><div class="post__content clearfix">
+			<p>Anyone who has created their own R package has probably come across <a href="https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/">Hilary Parker’s awesome blogpost</a>, that walks you through creating your very first R package. The comprehensive detail on everything R packages can be found in <a href="http://r-pkgs.had.co.nz/">Hadley Wickham’s superb book</a>.</p>
+<p>In this post I am going to walk through some of the developments in the package development space since Hilary wrote her blog four years ago, in particular focussing on the relatively recent <code>usethis</code> package. My main motivation coming from Hadley’s tweet:</p>
+<blockquote class="twitter-tweet" data-partner="tweetdeck">
+<p lang="en" dir="ltr">
+A super useful contribution would be to take <a href="https://twitter.com/hspter?ref_src=twsrc%5Etfw"><span class="citation">@hspter</span></a>’s awesome post and update it to use the latest usethis goodies <a href="https://t.co/ozb2M8lpuk">https://t.co/ozb2M8lpuk</a>
+</p>
+— Hadley Wickham (<span class="citation">@hadleywickham</span>) <a href="https://twitter.com/hadleywickham/status/1029435522937225216?ref_src=twsrc%5Etfw">August 14, 2018</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<div id="step-0-packages-we-need" class="section level3">
+<h3>Step 0: Packages we need</h3>
+<p>The three packages we will use for this are <code>devtools</code>, <code>roxygen2</code> and <code>usethis</code>.</p>
+<pre class="r"><code>pkgs &lt;- c(&quot;devtools&quot;, &quot;roxygen2&quot;, &quot;usethis&quot;)
+install.packages(pkgs)
+library(devtools)
+library(roxygen2)
+library(usethis)</code></pre>
+</div>
+<div id="step-1-creating-the-package" class="section level3">
+<h3>Step 1: Creating the package</h3>
+<p>The easiest way to create your package is to use <code>usethis::create_package</code>.</p>
+<pre class="r"><code>create_package(&quot;dogs&quot;)</code></pre>
+<p>This will create our package <code>&quot;dogs&quot;</code> in our current working directory. You can explicity state the path if you wish to create it elsewhere, e.g. <code>&quot;C:/Users/Tom/Documents/dogs&quot;</code>. Hopefully upon completion you should see the following:</p>
+<div class="figure">
+<img src="img/dogs_hex.png" />
 
+</div>
+</div>
+<div id="step-2-adding-functions" class="section level3">
+<h3>Step 2: Adding functions</h3>
+<p>We can utilise <code>usethis::use_r</code> to create our function.</p>
+<pre class="r"><code>use_r(&quot;dog_functions&quot;)</code></pre>
+<p>Now we can add the functions we wish to this file. If you don’t have any ready ones to hand, I’ve provided an example below:</p>
+<pre class="r"><code>dogs_over_cats &lt;- function(agree=TRUE){
+  if(agree==TRUE){
+    print(&quot;Woof woof!&quot;)
+  }
+  else {
+    print(&quot;Try again.&quot;)
+  }
+}</code></pre>
+<p>Congratulations. You have now created the bare minimum package. You can now load your new function using <code>ctrl + shift + l</code>.</p>
+<p>Test out your new function:</p>
+<pre class="r"><code>dogs_over_cats()</code></pre>
+<pre><code>## [1] &quot;Woof woof!&quot;</code></pre>
+</div>
+
+		</div>
 		
-	</main>
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 16 16"><path d="M16 9.5c0 .373-.24.74-.5 1l-5 5c-.275.26-.634.5-1 .5-.373 0-.74-.24-1-.5L1 8a2.853 2.853 0 0 1-.7-1C.113 6.55 0 5.973 0 5.6V1.4C0 1.034.134.669.401.401.67.134 1.034 0 1.4 0h4.2c.373 0 .95.113 1.4.3.45.187.732.432 1 .7l7.5 7.502c.26.274.5.632.5.998zM3.5 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/beginner/" rel="tag">beginner</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/package/" rel="tag">package</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/software-development/" rel="tag">software development</a></li>
+	</ul>
+</div>
+	</article>
+	
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Tomas Westlake avatar" src="/img/me.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Tomas Westlake</span>
+	</div>
+	<div class="authorbox__description">
+		Data Scientist for the UK Government
+	</div>
+</div>
+	
+<nav class="post-nav row clearfix">
+	<div class="post-nav__item post-nav__item--prev col-1-2">
+		<a class="post-nav__link" href="/post/reanimating-the-datasaurus/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Reanimating the Datasaurus</p></a>
+	</div>
+</nav>
+	
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-r-mageddon-netlify-com" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+</main>
 
 <aside class="sidebar">
 	

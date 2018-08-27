@@ -4,17 +4,17 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Advanced</title>
+	<title>Software Development</title>
 	<meta name="description" content="">
 	<meta name="generator" content="Hugo 0.46" />
-	<meta property="og:title" content="Advanced" />
+	<meta property="og:title" content="Software Development" />
 <meta property="og:description" content="Tom Westlake&#39;s personal blog about R related funtivities" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="/tags/advanced/" />
+<meta property="og:url" content="/tags/software-development/" />
 
 
 
-<meta property="og:updated_time" content="2018-08-12T00:00:00&#43;00:00"/>
+<meta property="og:updated_time" content="2018-08-26T00:00:00&#43;00:00"/>
 
 
 
@@ -26,12 +26,12 @@
 
 
 	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Advanced"/>
+<meta name="twitter:title" content="Software Development"/>
 <meta name="twitter:description" content="Tom Westlake&#39;s personal blog about R related funtivities"/>
 
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
 	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="alternate" type="application/rss&#43;xml" href="/tags/advanced/index.xml">
+	<link rel="alternate" type="application/rss&#43;xml" href="/tags/software-development/index.xml">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
 	<link rel="stylesheet" href="/css/style.css">
 	<script type="text/javascript" src="/js/scripts.js"></script>
@@ -72,71 +72,27 @@ if (!doNotTrack) {
 
 	<main class="main list content" role="main">
 		<header class="page-header">
-			<h1 class="page-header__title">Advanced</h1>
+			<h1 class="page-header__title">Software Development</h1>
 		</header><article class="list__item post">
 	<figure class="list__thumbnail">
-		<a href="/post/the-burger-king-pandemic/">
-			<img src="/img/bk.gif" alt="The Burger King Pandemic" />
+		<a href="/post/writing-an-r-package-from-scratch/">
+			<img src="/img/dogs_hex.png" alt="Writing an R package from scratch" />
 		</a>
 	</figure>
 	<div class="list__content clearfix">
 		<header class="list__header">
 			<h3 class="list__title post__title ">
-				<a href="/post/the-burger-king-pandemic/" rel="bookmark">The Burger King Pandemic</a>
+				<a href="/post/writing-an-r-package-from-scratch/" rel="bookmark">Writing an R package from scratch</a>
 			</h3><div class="list__meta meta">
 <svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
-<time class="post__meta-date meta-date" datetime="2018-08-12T00:00:00">August 12, 2018</time></div>
+<time class="post__meta-date meta-date" datetime="2018-08-26T00:00:00">August 26, 2018</time></div>
 		</header>
 		<div class="list__excerpt post__content">
-			Whilst I was rooting around for inspiration, my girlfriend suggested I should do a post about food, quickly followed up by “burgers!!!”. So a few google searches later and I decided to create an animated map, showing all the countries of the world that had at least one Burger King store.
-I’m particularly chuffed that I’ve managed to combine a multitude of really cool packages in this post. We’ve got:
+			Anyone who has created their own R package has probably come across Hilary Parker’s awesome blogpost, that walks you through creating your very first R package. The comprehensive detail on everything R packages can be found in Hadley Wickham’s superb book.
+In this post I am going to walk through some of the developments in the package development space since Hilary wrote her blog four years ago, in particular focussing on the relatively recent usethis package.
 		</div>
 		<div class="list__footer">
-			<a class="list__footer-readmore btn" href="/post/the-burger-king-pandemic/">Read more…</a>
-		</div>
-	</div>
-</article><article class="list__item post">
-	<figure class="list__thumbnail">
-		<a href="/post/uk-population-pyramid/">
-			<img src="/img/tom-uk-pyramid-5%20fps.gif" alt="UK Population Pyramid" />
-		</a>
-	</figure>
-	<div class="list__content clearfix">
-		<header class="list__header">
-			<h3 class="list__title post__title ">
-				<a href="/post/uk-population-pyramid/" rel="bookmark">UK Population Pyramid</a>
-			</h3><div class="list__meta meta">
-<svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
-<time class="post__meta-date meta-date" datetime="2018-08-02T00:00:00">August 02, 2018</time></div>
-		</header>
-		<div class="list__excerpt post__content">
-			On my journey to creating my animated Premier League table in my previous post, I noticed a lot of examples for creating gifs using the magick package. The gist behind the majority of these examples was to create a sequence of snapshots which could be combined together to create animations. Whilst not quite as seamless as gganimate, it appears to be much more versatile.
-So I thought I would try and make one.
-		</div>
-		<div class="list__footer">
-			<a class="list__footer-readmore btn" href="/post/uk-population-pyramid/">Read more…</a>
-		</div>
-	</div>
-</article><article class="list__item post">
-	<figure class="list__thumbnail">
-		<a href="/post/interactive-premier-league-table/">
-			<img src="/img/final_animated_prem_table.gif" alt="Interactive Premier League Table" />
-		</a>
-	</figure>
-	<div class="list__content clearfix">
-		<header class="list__header">
-			<h3 class="list__title post__title ">
-				<a href="/post/interactive-premier-league-table/" rel="bookmark">Interactive Premier League Table</a>
-			</h3><div class="list__meta meta">
-<svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
-<time class="post__meta-date meta-date" datetime="2018-07-31T00:00:00">July 31, 2018</time></div>
-		</header>
-		<div class="list__excerpt post__content">
-			For my inaugural blog post I decided I would step into the world of animated graphics for the first time. I was inspired by the presentation that Thomas Lin Pedersen gave at the useR! conference on gganimate and was motivated to create my very first gif.
-I rooted around for ideas and decided upon creating an animated table of the Premier League for the last season, with the clubs being depicted by their crests.
-		</div>
-		<div class="list__footer">
-			<a class="list__footer-readmore btn" href="/post/interactive-premier-league-table/">Read more…</a>
+			<a class="list__footer-readmore btn" href="/post/writing-an-r-package-from-scratch/">Read more…</a>
 		</div>
 	</div>
 </article>

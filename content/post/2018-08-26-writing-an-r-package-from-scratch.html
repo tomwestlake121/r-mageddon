@@ -16,7 +16,7 @@ thumbnail: 'img/dogs_hex.png'
 
 
 <p>Anyone who has created their own R package has probably come across <a href="https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/">Hilary Parker’s awesome blogpost</a>, that walks you through creating your very first R package. The comprehensive detail on everything R packages can be found in <a href="http://r-pkgs.had.co.nz/">Hadley Wickham’s superb book</a>.</p>
-<p>In this post I am going to walk through some of the developments in the package development space since Hilary wrote her blog four years ago, in particular focussing on the relatively recent <code>usethis</code> package. My main motivation coming from Hadley’s tweet:</p>
+<p>In this post I am going to walk through some of the developments in the package development space since Hilary wrote her blog four years ago, in particular focussing on the relatively recent <code>usethis</code> package. I’ve made the assumption for this following tutorial that you’re a sane individual and that you’re using the <a href="https://www.rstudio.com/products/rstudio/download/">RStudio IDE</a>. My main motivation stemmed from Hadley’s tweet:</p>
 <blockquote class="twitter-tweet" data-partner="tweetdeck">
 <p lang="en" dir="ltr">
 A super useful contribution would be to take <a href="https://twitter.com/hspter?ref_src=twsrc%5Etfw"><span class="citation">@hspter</span></a>’s awesome post and update it to use the latest usethis goodies <a href="https://t.co/ozb2M8lpuk">https://t.co/ozb2M8lpuk</a>
@@ -24,9 +24,11 @@ A super useful contribution would be to take <a href="https://twitter.com/hspter
 — Hadley Wickham (<span class="citation">@hadleywickham</span>) <a href="https://twitter.com/hadleywickham/status/1029435522937225216?ref_src=twsrc%5Etfw">August 14, 2018</a>
 </blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<div id="initial-setup" class="section level2">
+<h2>Initial Setup</h2>
 <div id="step-0-packages-we-need" class="section level3">
 <h3>Step 0: Packages we need</h3>
-<p>The three packages we will use for this are <code>devtools</code>, <code>roxygen2</code> and <code>usethis</code>.</p>
+<p>The three packages we require are <code>devtools</code>, <code>roxygen2</code> and <code>usethis</code>.</p>
 <pre class="r"><code>pkgs &lt;- c(&quot;devtools&quot;, &quot;roxygen2&quot;, &quot;usethis&quot;)
 install.packages(pkgs)
 library(devtools)
@@ -37,17 +39,18 @@ library(usethis)</code></pre>
 <h3>Step 1: Creating the package</h3>
 <p>The easiest way to create your package is to use <code>usethis::create_package</code>.</p>
 <pre class="r"><code>create_package(&quot;dogs&quot;)</code></pre>
-<p>This will create our package <code>&quot;dogs&quot;</code> in our current working directory. You can explicity state the path if you wish to create it elsewhere, e.g. <code>&quot;C:/Users/Tom/Documents/dogs&quot;</code>. Hopefully upon completion you should see the following:</p>
-<div class="figure">
-<img src="img/dogs_hex.png" />
-
-</div>
+<p>This will create our package <code>&quot;dogs&quot;</code> in our current working directory. You can explicity state the path if you wish to create it elsewhere, e.g. <code>&quot;C:/Users/Tom/Documents/dogs&quot;</code>. Upon completion you will see something similar to:</p>
+<p><img src="/img/screens1.png" /> </p>
+<p>And the following files can be observed:</p>
+<p><img src="/img/screens2.png" /><br />
+</p>
 </div>
 <div id="step-2-adding-functions" class="section level3">
 <h3>Step 2: Adding functions</h3>
-<p>We can utilise <code>usethis::use_r</code> to create our function.</p>
+<p>Functions for an R package should be created within the R subdirectory. We can utilise <code>usethis::use_r</code> to quickly create a script to contain our first function.</p>
 <pre class="r"><code>use_r(&quot;dog_functions&quot;)</code></pre>
-<p>Now we can add the functions we wish to this file. If you don’t have any ready ones to hand, I’ve provided an example below:</p>
+<p>Now we can add the functions we want to this file. If you don’t have any ready ones to hand, I prepared one earlier:</p>
+<p>If you want to know more about writing your first function, I thoroughly recommend this <a href="https://www.coursera.org/lecture/r-programming/your-first-r-function-BM3dR">video by Roger Peng</a>.</p>
 <pre class="r"><code>dogs_over_cats &lt;- function(agree=TRUE){
   if(agree==TRUE){
     print(&quot;Woof woof!&quot;)
@@ -56,8 +59,79 @@ library(usethis)</code></pre>
     print(&quot;Try again.&quot;)
   }
 }</code></pre>
-<p>Congratulations. You have now created the bare minimum package. You can now load your new function using <code>ctrl + shift + l</code>.</p>
-<p>Test out your new function:</p>
+<p>Congratulations, you have now created the barest of bare minimum packages. You can now load your new function using <code>ctrl + shift + l</code>, or run <code>devtools::load_code</code>.</p>
+<p>Take your new function out for a spin:</p>
 <pre class="r"><code>dogs_over_cats()</code></pre>
 <pre><code>## [1] &quot;Woof woof!&quot;</code></pre>
+</div>
+<div id="step-3-adding-function-documentation" class="section level3">
+<h3>Step 3: Adding function documentation</h3>
+<p>Now that we’ve created our function, it’s time to add some documentation that will help us remember how to correctly use our function when we forget! Thanks to the workings of <code>roxygen2</code> this is a simple process. Navigate back to your funciton (bonus points if you use <code>usethis::use_r</code>). To create the documentation we need to add special comments above the function, that will be used to generate the help files. More information on documenting functions can be found <a href="http://r-pkgs.had.co.nz/man.html">here</a>. Below you can see an example for my earlier dogs function.</p>
+<pre class="r"><code>#&#39; @title A Dog Function
+#&#39;
+#&#39; @description This function allows you to express your love for the superior furry animal.
+#&#39; @param agree Do you agree dogs are the best pet? Defaults to TRUE.
+#&#39; @keywords dogs
+#&#39; @export
+#&#39; @examples
+#&#39; dogs_over_cats()
+ 
+dogs_over_cats &lt;- function(agree=TRUE){
+  if(agree==TRUE){
+    print(&quot;Woof woof!&quot;)
+  }
+  else {
+    print(&quot;Try again.&quot;)
+  }
+}</code></pre>
+<p>After we’ve added this we simply run <code>ctrl + shift + d</code> or <code>devtools::document</code>:</p>
+<pre class="r"><code>document()</code></pre>
+<p>This function generates the documentation (<code>.Rd</code>) files and then stores them in the <code>man</code> subdirectory. We can now install this package and check out our swanky new documentation. Install your package using <code>ctrl + shift + b</code> or <code>devtools::install</code>.</p>
+<pre class="r"><code>install()</code></pre>
+<p>Now try searching for your new function, here’s what I receive when I type <code>?dogs_over_cats</code>:</p>
+<p><img src="/img/screens3.png" /> </p>
+<p>Congratulations, you’ve created a real R package, complete with documentation that will store all the R functions you could ever devise.</p>
+</div>
+</div>
+<div id="further-development" class="section level2">
+<h2>Further Development</h2>
+<p>In this section I’m going to walk through some of the additional things you can do to begin the journey to the perfect package and will continue to exploit the awesome <code>usethis</code> package.</p>
+<div id="step-4-editing-your-description" class="section level3">
+<h3>Step 4: Editing your Description</h3>
+<p>Hopefully you will remember part of the earlier setup involved creating a <code>Description</code> file. This will look similar to the following:</p>
+<div class="figure">
+<img src="/img/screens4.png" />
+
+</div>
+<p></p>
+<p>Fill in the title and description lines to give a broad understanding of the purpose of your package. The package line displays the name of the package. The <a href="mailto:Authors@R">Authors@R</a> line should be replaced with your information, the “aut” role signifies author and “cre” signifies maintainer. License notates under what conditions your code can be used. Luckily there is a set of <code>usethis</code> functions that will populate the correct fields with some of the most common licenses. For my package I used:</p>
+<pre class="r"><code>use_cc0_license(&quot;Tomas Westlake&quot;)</code></pre>
+<p>This really handy function changes the correct field of the description and provides you with a <code>LICENSE.md</code> file.</p>
+<p>My finished dogs package description looks like:</p>
+<div class="figure">
+<img src="/img/screens5.png" />
+
+</div>
+<p></p>
+<p>The Description file is also where you add package dependencies, as well as suggest other packages that work well in tandem. To read more detail on the Description file, see this <a href="http://r-pkgs.had.co.nz/description.html">section in Hadley’s book</a></p>
+</div>
+<div id="step-5-add-package-documentation" class="section level3">
+<h3>Step 5: Add package documentation</h3>
+<p>So although we have documentation for our functions so far, we don’t have anything for the overall package. Running:</p>
+<pre class="r"><code>usethis::use_package_doc()</code></pre>
+<p>Will generate a dummy <code>dogs-package.R</code> file in the R folder.</p>
+<p>Then using:</p>
+<pre class="r"><code>devtools::document()</code></pre>
+<p>The dummy package file will lead to roxygen2 creating overall documentation for your package, drawing upon the fields we have just filled out in the description. Trial this by installing your package, <code>ctrl+shift+b</code> or <code>devtools::install</code> and typing <code>package?dogs</code>.</p>
+<p>This is my result:</p>
+<div class="figure">
+<img src="/img/screens6.png" />
+
+</div>
+
+</div>
+<div id="step-7-adding-git" class="section level3">
+<h3>Step 7: Adding git</h3>
+<p>Git is the</p>
+</div>
 </div>

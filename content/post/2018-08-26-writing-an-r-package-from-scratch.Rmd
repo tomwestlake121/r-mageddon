@@ -8,6 +8,9 @@ tags:
   - beginner
   - package
   - software development
+  - devtools
+  - usethis
+  - roxygen2
 description: ''
 thumbnail: 'img/dogs_hex.png'
 ---
@@ -19,8 +22,11 @@ In this post I am going to walk through some of the developments in the package 
 <blockquote class="twitter-tweet" data-partner="tweetdeck"><p lang="en" dir="ltr">A super useful contribution would be to take <a href="https://twitter.com/hspter?ref_src=twsrc%5Etfw">@hspter</a>’s awesome post and update it to use the latest usethis goodies <a href="https://t.co/ozb2M8lpuk">https://t.co/ozb2M8lpuk</a></p>&mdash; Hadley Wickham (@hadleywickham) <a href="https://twitter.com/hadleywickham/status/1029435522937225216?ref_src=twsrc%5Etfw">August 14, 2018</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
+The package I have created during the course of this blog can be found on my [GitHub](https://github.com/tomwestlake121/dogs).
 
 ## Initial Setup
+
+Within this section we will assemble the bare bones of a package and is very similar to Hilary's blog I linked to earlier.
 
 ### Step 0: Packages we need
 
@@ -178,8 +184,69 @@ This is my result:
 
 ![](/img/screens6.png)
 
-\newline
+\newline \newline
 
-### Step 7: Adding git
+### Step 6: Adding a Git repo
 
-Git is the  
+[Git](https://git-scm.com/downloads) is the premier version control system that will keep a track of all the code you create and edit, and will allow you to share those changes with others. To learn more about using Git check out this [section in Hadley's book](http://r-pkgs.had.co.nz/git.html). 
+
+With the `usethis` package (so long as you have Git installed and configured) it is really simple to add a git repo for your package:
+
+```{r, eval = F}
+usethis::use_git()
+```
+
+This will create a git repo, ask if you want to commit your current files (yes you do) then ask to restart RStudio to provide you with the Git pane. Try editing a function, saving and then using the git panel on the right to commit your changes. Watch me do this in my dogs package below:
+
+![](/img/git.gif)
+
+Now whilst git on it's own is great, it reaches truly awesome levels when paired with a site like GitHub. And guess what, the `usethis` package can speed up this process for you too!!
+
+### Step 7: Uploading to GitHub
+
+To complete this step you will need to have your own [GitHub account](https://github.com/).
+
+Uploading your package to GitHub is incredibly useful. Any R user will be able to install your package using `devtools::install_github`. It also gives you a nice home for your package, a place to add and track issues and facilitates collaboration. So lets jump straight in!
+
+There is one step before we can upload our package to our GitHub account - we must make a Personal Access Token, PAT. We can use this token instead of a password for authentication purposes. Luckily `usethis` has our back again. Running:
+
+```{r, eval = F}
+browse_github_pat()
+```
+
+Will take us straight to the relevant GitHub webpage. Then we generate a token (leave the defaults selected) and copy this token to our keyboard. I will denote my token as "xxx" in following code. Now we have our token we can upload our package to GitHub.
+
+```{r, eval = F}
+use_github(protocol = "https", auth_token = "xxx")
+```
+
+And.... it just works!!! Amazing. It also adds two new links to our description file, one to the [GitHub URL](https://github.com/tomwestlake121/dogs/) and one to the [Issues tab](https://github.com/tomwestlake121/dogs/issues). 
+
+
+### Step 8: Adding a Readme
+
+On a GitHub site, README.md files are displayed below the files. `usethis` makes it quick to generate one of these. You can choose either to have a straight `.md` file, or an `RMarkdown` file that can be knitted to give you the `.md` file. Personally I prefer the `.Rmd` file, because you can then easily embed R code within oyur README. Running:
+
+```{r, eval = F}
+use_readme_rmd()
+```
+
+Will generate a skeleton file that you can edit to give an overview of your package. You can see the README I generated [here](https://github.com/tomwestlake121/dogs/blob/master/README.md).
+
+### Step 9: Adding a logo
+
+Now if you happened to navigate to my previous link, you are probably wondering, how do I get such an awesome logo? First I downloaded the Powerpoint template found on this great blog on making a [Hex Sticker](https://emitanaka.github.io/post/hexsticker/) and customised it.
+
+And guess what, `usethis` has a function to allow me to quickly add a logo! 
+
+```{r, eval = F}
+use_logo("C:/Users/Tom/Desktop/dogs_hex.png")
+```
+
+This section of code will add the picture you provide, resized to the correct dimensions, to a subdirectory within your project. It also copies the code you need to add this logo to your package README. Navigate to your README.Rmd and paste the code over your current title (# dogs for me). Knit the README and you will see the results!
+
+### Wrap up
+
+Ok so we've covered a lot of ground in this blog, but there is so much more we can with `usethis`! One really useful feature is that you can store a lot of default values in your .RProfile, which is super handy when you are creating plenty of R Packages. You can find more about this on the official `usethis` [website](http://usethis.r-lib.org/articles/articles/usethis-setup.html).
+
+I'm also hoping to write another blog or two going into more detail on some other parts of package development, such as unit testing.

@@ -1,5 +1,4 @@
 ---
-draft: yes
 title: Writing an R package from scratch
 author: Tom Westlake
 date: '2018-08-26'
@@ -9,6 +8,9 @@ tags:
   - beginner
   - package
   - software development
+  - devtools
+  - usethis
+  - roxygen2
 description: ''
 thumbnail: 'img/dogs_hex.png'
 ---
@@ -24,8 +26,10 @@ A super useful contribution would be to take <a href="https://twitter.com/hspter
 — Hadley Wickham (<span class="citation">@hadleywickham</span>) <a href="https://twitter.com/hadleywickham/status/1029435522937225216?ref_src=twsrc%5Etfw">August 14, 2018</a>
 </blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>The package I have created during the course of this blog can be found on my <a href="https://github.com/tomwestlake121/dogs">GitHub</a>.</p>
 <div id="initial-setup" class="section level2">
 <h2>Initial Setup</h2>
+<p>Within this section we will assemble the bare bones of a package and is very similar to Hilary’s blog I linked to earlier.</p>
 <div id="step-0-packages-we-need" class="section level3">
 <h3>Step 0: Packages we need</h3>
 <p>The three packages we require are <code>devtools</code>, <code>roxygen2</code> and <code>usethis</code>.</p>
@@ -128,10 +132,46 @@ dogs_over_cats &lt;- function(agree=TRUE){
 <img src="/img/screens6.png" />
 
 </div>
+<p></p>
+</div>
+<div id="step-6-adding-a-git-repo" class="section level3">
+<h3>Step 6: Adding a Git repo</h3>
+<p><a href="https://git-scm.com/downloads">Git</a> is the premier version control system that will keep a track of all the code you create and edit, and will allow you to share those changes with others. To learn more about using Git check out this <a href="http://r-pkgs.had.co.nz/git.html">section in Hadley’s book</a>.</p>
+<p>With the <code>usethis</code> package (so long as you have Git installed and configured) it is really simple to add a git repo for your package:</p>
+<pre class="r"><code>usethis::use_git()</code></pre>
+<p>This will create a git repo, ask if you want to commit your current files (yes you do) then ask to restart RStudio to provide you with the Git pane. Try editing a function, saving and then using the git panel on the right to commit your changes. Watch me do this in my dogs package below:</p>
+<div class="figure">
+<img src="/img/git.gif" />
 
 </div>
-<div id="step-7-adding-git" class="section level3">
-<h3>Step 7: Adding git</h3>
-<p>Git is the</p>
+<p>Now whilst git on it’s own is great, it reaches truly awesome levels when paired with a site like GitHub. And guess what, the <code>usethis</code> package can speed up this process for you too!!</p>
+</div>
+<div id="step-7-uploading-to-github" class="section level3">
+<h3>Step 7: Uploading to GitHub</h3>
+<p>To complete this step you will need to have your own <a href="https://github.com/">GitHub account</a>.</p>
+<p>Uploading your package to GitHub is incredibly useful. Any R user will be able to install your package using <code>devtools::install_github</code>. It also gives you a nice home for your package, a place to add and track issues and facilitates collaboration. So lets jump straight in!</p>
+<p>There is one step before we can upload our package to our GitHub account - we must make a Personal Access Token, PAT. We can use this token instead of a password for authentication purposes. Luckily <code>usethis</code> has our back again. Running:</p>
+<pre class="r"><code>browse_github_pat()</code></pre>
+<p>Will take us straight to the relevant GitHub webpage. Then we generate a token (leave the defaults selected) and copy this token to our keyboard. I will denote my token as “xxx” in following code. Now we have our token we can upload our package to GitHub.</p>
+<pre class="r"><code>use_github(protocol = &quot;https&quot;, auth_token = &quot;xxx&quot;)</code></pre>
+<p>And…. it just works!!! Amazing. It also adds two new links to our description file, one to the <a href="https://github.com/tomwestlake121/dogs/">GitHub URL</a> and one to the <a href="https://github.com/tomwestlake121/dogs/issues">Issues tab</a>.</p>
+</div>
+<div id="step-8-adding-a-readme" class="section level3">
+<h3>Step 8: Adding a Readme</h3>
+<p>On a GitHub site, README.md files are displayed below the files. <code>usethis</code> makes it quick to generate one of these. You can choose either to have a straight <code>.md</code> file, or an <code>RMarkdown</code> file that can be knitted to give you the <code>.md</code> file. Personally I prefer the <code>.Rmd</code> file, because you can then easily embed R code within oyur README. Running:</p>
+<pre class="r"><code>use_readme_rmd()</code></pre>
+<p>Will generate a skeleton file that you can edit to give an overview of your package. You can see the README I generated <a href="https://github.com/tomwestlake121/dogs/blob/master/README.md">here</a>.</p>
+</div>
+<div id="step-9-adding-a-logo" class="section level3">
+<h3>Step 9: Adding a logo</h3>
+<p>Now if you happened to navigate to my previous link, you are probably wondering, how do I get such an awesome logo? First I downloaded the Powerpoint template found on this great blog on making a <a href="https://emitanaka.github.io/post/hexsticker/">Hex Sticker</a> and customised it.</p>
+<p>And guess what, <code>usethis</code> has a function to allow me to quickly add a logo!</p>
+<pre class="r"><code>use_logo(&quot;C:/Users/Tom/Desktop/dogs_hex.png&quot;)</code></pre>
+<p>This section of code will add the picture you provide, resized to the correct dimensions, to a subdirectory within your project. It also copies the code you need to add this logo to your package README. Navigate to your README.Rmd and paste the code over your current title (# dogs for me). Knit the README and you will see the results!</p>
+</div>
+<div id="wrap-up" class="section level3">
+<h3>Wrap up</h3>
+<p>Ok so we’ve covered a lot of ground in this blog, but there is so much more we can with <code>usethis</code>! One really useful feature is that you can store a lot of default values in your .RProfile, which is super handy when you are creating plenty of R Packages. You can find more about this on the official <code>usethis</code> <a href="http://usethis.r-lib.org/articles/articles/usethis-setup.html">website</a>.</p>
+<p>I’m also hoping to write another blog or two going into more detail on some other parts of package development, such as unit testing.</p>
 </div>
 </div>

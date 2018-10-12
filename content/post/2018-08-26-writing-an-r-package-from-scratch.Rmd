@@ -82,7 +82,7 @@ dogs_over_cats <- function(agree=TRUE){
 
 ```
 
-Congratulations, you have now created the barest of bare minimum packages. You can now load your new function using `ctrl + shift + l`, or run `devtools::load_code`.
+Congratulations, you have now created the barest of bare minimum packages. You can now load your new function using `ctrl + shift + l`, or run `devtools::load_all()`.
 
 Take your new function out for a spin:
 

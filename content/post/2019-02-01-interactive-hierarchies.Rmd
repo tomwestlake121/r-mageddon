@@ -20,7 +20,7 @@ knitr::opts_chunk$set(message = F, warning = F)
 
 It's been a while since my last blog (turns out moving both job and city requires some effort), but for my glorious return I've decided to dive into the world of interactive graphics. In particular I'm going to investigate some alternatives packages that allow us to visualise hierarchical data.
 
-Interactive visualisations within R can be created using [htmlwidgets](https://www.htmlwidgets.org/). This specific set of packages brings the a host of interactive JavaScript visualisation libraries to R, without the user needing any prior JavaScript knowledge. Notable htmlwidget packages are:
+Interactive visualisations within R can be created using [htmlwidgets](https://www.htmlwidgets.org/). This specific set of packages brings a host of interactive JavaScript visualisation libraries to R, without the user needing any prior JavaScript knowledge. Notable htmlwidget packages are:
 
 * [Leaflet](http://rstudio.github.io/leaflet/) - The premier JavaScript library for creating interactive maps.
 * [Plotly](https://plot.ly/r/)  - A library that makes interactive, publication-quality graphs and can convert existing ggplot2 objects into interactive graphs.

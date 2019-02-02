@@ -14,7 +14,7 @@
 
 
 
-<meta property="og:updated_time" content="2018-08-17T00:00:00&#43;00:00"/>
+<meta property="og:updated_time" content="2019-02-01T00:00:00&#43;00:00"/>
 
 
 
@@ -74,6 +74,28 @@ if (!doNotTrack) {
 		<header class="page-header">
 			<h1 class="page-header__title">Visualisation</h1>
 		</header><article class="list__item post">
+	<figure class="list__thumbnail">
+		<a href="/post/interactive-hierarchies/">
+			<img src="/img/treemap.gif" alt="Interactive Hierarchies - Drowning in rats" />
+		</a>
+	</figure>
+	<div class="list__content clearfix">
+		<header class="list__header">
+			<h3 class="list__title post__title ">
+				<a href="/post/interactive-hierarchies/" rel="bookmark">Interactive Hierarchies - Drowning in rats</a>
+			</h3><div class="list__meta meta">
+<svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
+<time class="post__meta-date meta-date" datetime="2019-02-01T00:00:00">February 01, 2019</time></div>
+		</header>
+		<div class="list__excerpt post__content">
+			It’s been a while since my last blog (turns out moving both job and city requires some effort), but for my glorious return I’ve decided to dive into the world of interactive graphics. In particular I’m going to investigate some alternatives packages that allow us to visualise hierarchical data.
+Interactive visualisations within R can be created using htmlwidgets. This specific set of packages brings the a host of interactive JavaScript visusalisation libraries to R, without the user needing any prior JavaScript knowledge.
+		</div>
+		<div class="list__footer">
+			<a class="list__footer-readmore btn" href="/post/interactive-hierarchies/">Read more…</a>
+		</div>
+	</div>
+</article><article class="list__item post">
 	<figure class="list__thumbnail">
 		<a href="/post/reanimating-the-datasaurus/">
 			<img src="/img/Datasaurus.gif" alt="Reanimating the Datasaurus" />
@@ -142,13 +164,13 @@ So I thought I would try and make one.
 </article><article class="list__item post">
 	<figure class="list__thumbnail">
 		<a href="/post/interactive-premier-league-table/">
-			<img src="/img/final_animated_prem_table.gif" alt="Interactive Premier League Table" />
+			<img src="/img/final_animated_prem_table.gif" alt="Animated Premier League Table" />
 		</a>
 	</figure>
 	<div class="list__content clearfix">
 		<header class="list__header">
 			<h3 class="list__title post__title ">
-				<a href="/post/interactive-premier-league-table/" rel="bookmark">Interactive Premier League Table</a>
+				<a href="/post/interactive-premier-league-table/" rel="bookmark">Animated Premier League Table</a>
 			</h3><div class="list__meta meta">
 <svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
 <time class="post__meta-date meta-date" datetime="2018-07-31T00:00:00">July 31, 2018</time></div>
@@ -182,11 +204,12 @@ I rooted around for ideas and decided upon creating an animated table of the Pre
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/interactive-hierarchies/">Interactive Hierarchies - Drowning in rats</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/writing-an-r-package-from-scratch/">Writing an R package from scratch</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/reanimating-the-datasaurus/">Reanimating the Datasaurus</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/the-burger-king-pandemic/">The Burger King Pandemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/uk-population-pyramid/">UK Population Pyramid</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/interactive-premier-league-table/">Interactive Premier League Table</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/interactive-premier-league-table/">Animated Premier League Table</a></li>
 		</ul>
 	</div>
 </div>
@@ -235,10 +258,12 @@ I rooted around for ideas and decided upon creating an animated table of the Pre
 		<a class="widget-taglist__link widget__link btn" href="/tags/ggplot2" title="Ggplot2">Ggplot2 (2)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/gifski" title="Gifski">Gifski (1)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/glue" title="Glue">Glue (1)</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/intermediate" title="Intermediate">Intermediate (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/hierarchical" title="Hierarchical">Hierarchical (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/interactive" title="Interactive">Interactive (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/intermediate" title="Intermediate">Intermediate (2)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/magick" title="Magick">Magick (1)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/package" title="Package">Package (1)</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/r" title="R">R (4)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/r" title="R">R (5)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/readxl" title="Readxl">Readxl (1)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/roxygen2" title="Roxygen2">Roxygen2 (1)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/rvest" title="Rvest">Rvest (1)</a>
@@ -246,14 +271,14 @@ I rooted around for ideas and decided upon creating an animated table of the Pre
 		<a class="widget-taglist__link widget__link btn" href="/tags/software-development" title="Software development">Software development (1)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/tidyverse" title="Tidyverse">Tidyverse (3)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/usethis" title="Usethis">Usethis (1)</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/visualisation" title="Visualisation">Visualisation (4)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/visualisation" title="Visualisation">Visualisation (5)</a>
 	</div>
 </div>
 </aside>
 	</div>
 		<footer class="footer">
 			<div class="container container-inner">
-				<div class="footer__copyright">&copy; 2018 R-mageddon. <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span></div>
+				<div class="footer__copyright">&copy; 2019 R-mageddon. <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span></div>
 			</div>
 		</footer>
 	</div>

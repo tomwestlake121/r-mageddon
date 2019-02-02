@@ -4,10 +4,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Interactive Premier League Table</title>
+	<title>Animated Premier League Table</title>
 	<meta name="description" content="">
 	<meta name="generator" content="Hugo 0.45.1" />
-	<meta property="og:title" content="Interactive Premier League Table" />
+	<meta property="og:title" content="Animated Premier League Table" />
 <meta property="og:description" content="For my inaugural blog post I decided I would step into the world of animated graphics for the first time. I was inspired by the presentation that Thomas Lin Pedersen gave at the useR! conference on gganimate and was motivated to create my very first gif.
 I rooted around for ideas and decided upon creating an animated table of the Premier League for the last season, with the clubs being depicted by their crests." />
 <meta property="og:type" content="article" />
@@ -30,7 +30,7 @@ I rooted around for ideas and decided upon creating an animated table of the Pre
 
 
 	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Interactive Premier League Table"/>
+<meta name="twitter:title" content="Animated Premier League Table"/>
 <meta name="twitter:description" content="For my inaugural blog post I decided I would step into the world of animated graphics for the first time. I was inspired by the presentation that Thomas Lin Pedersen gave at the useR! conference on gganimate and was motivated to create my very first gif.
 I rooted around for ideas and decided upon creating an animated table of the Premier League for the last season, with the clubs being depicted by their crests."/>
 
@@ -77,12 +77,12 @@ if (!doNotTrack) {
 <main class="main content">
 	<article class="post">
 		<header class="post__header">
-			<h1 class="post__title">Interactive Premier League Table</h1><div class="post__meta meta">
+			<h1 class="post__title">Animated Premier League Table</h1><div class="post__meta meta">
 <svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
 <time class="post__meta-date meta-date" datetime="2018-07-31T00:00:00">July 31, 2018</time></div>
 		</header>
 		<figure class="post__thumbnail">
-			<img src="/img/final_animated_prem_table.gif" alt="Interactive Premier League Table">
+			<img src="/img/final_animated_prem_table.gif" alt="Animated Premier League Table">
 		</figure><div class="post__content clearfix">
 			<p>For my inaugural blog post I decided I would step into the world of animated graphics for the first time. I was inspired by the <a href="(https://www.youtube.com/watch?v=21ZWDrTukEs)">presentation</a> that Thomas Lin Pedersen gave at the <a href="https://user2018.r-project.org/">useR!</a> conference on <a href="https://github.com/thomasp85/gganimate">gganimate</a> and was motivated to create my very first gif.</p>
 <p>I rooted around for ideas and decided upon creating an animated table of the Premier League for the last season, with the clubs being depicted by their crests. A quick google pointed me towards a <a href="https://www.football-data.org/">free football API</a> and that was already an <a href="https://github.com/dashee87/footballR">R package</a> to interface with this API. NB: This API has since been updated to v2, which isn’t currently supported by the linked package, but is perfectly fine for the historical dataset I wished to extract.</p>
@@ -223,11 +223,12 @@ library(ggimage)</code></pre>
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/interactive-hierarchies/">Interactive Hierarchies - Drowning in rats</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/writing-an-r-package-from-scratch/">Writing an R package from scratch</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/reanimating-the-datasaurus/">Reanimating the Datasaurus</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/the-burger-king-pandemic/">The Burger King Pandemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/uk-population-pyramid/">UK Population Pyramid</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/interactive-premier-league-table/">Interactive Premier League Table</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/interactive-premier-league-table/">Animated Premier League Table</a></li>
 		</ul>
 	</div>
 </div>
@@ -276,10 +277,12 @@ library(ggimage)</code></pre>
 		<a class="widget-taglist__link widget__link btn" href="/tags/ggplot2" title="Ggplot2">Ggplot2 (2)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/gifski" title="Gifski">Gifski (1)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/glue" title="Glue">Glue (1)</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/intermediate" title="Intermediate">Intermediate (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/hierarchical" title="Hierarchical">Hierarchical (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/interactive" title="Interactive">Interactive (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/intermediate" title="Intermediate">Intermediate (2)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/magick" title="Magick">Magick (1)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/package" title="Package">Package (1)</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/r" title="R">R (4)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/r" title="R">R (5)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/readxl" title="Readxl">Readxl (1)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/roxygen2" title="Roxygen2">Roxygen2 (1)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/rvest" title="Rvest">Rvest (1)</a>
@@ -287,14 +290,14 @@ library(ggimage)</code></pre>
 		<a class="widget-taglist__link widget__link btn" href="/tags/software-development" title="Software development">Software development (1)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/tidyverse" title="Tidyverse">Tidyverse (3)</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/usethis" title="Usethis">Usethis (1)</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/visualisation" title="Visualisation">Visualisation (4)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/visualisation" title="Visualisation">Visualisation (5)</a>
 	</div>
 </div>
 </aside>
 	</div>
 		<footer class="footer">
 			<div class="container container-inner">
-				<div class="footer__copyright">&copy; 2018 R-mageddon. <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span></div>
+				<div class="footer__copyright">&copy; 2019 R-mageddon. <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span></div>
 			</div>
 		</footer>
 	</div>

@@ -102,9 +102,27 @@
     </item>
     
     <item>
+      <title>Hierarchical</title>
+      <link>/tags/hierarchical/</link>
+      <pubDate>Fri, 01 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/hierarchical/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Interactive</title>
+      <link>/tags/interactive/</link>
+      <pubDate>Fri, 01 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/interactive/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Intermediate</title>
       <link>/tags/intermediate/</link>
-      <pubDate>Fri, 17 Aug 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/intermediate/</guid>
       <description></description>
@@ -131,7 +149,7 @@
     <item>
       <title>R</title>
       <link>/tags/r/</link>
-      <pubDate>Fri, 17 Aug 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/r/</guid>
       <description></description>
@@ -203,7 +221,7 @@
     <item>
       <title>Visualisation</title>
       <link>/tags/visualisation/</link>
-      <pubDate>Fri, 17 Aug 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/visualisation/</guid>
       <description></description>

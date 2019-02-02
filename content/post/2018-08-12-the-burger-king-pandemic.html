@@ -52,7 +52,7 @@ library(gifski)</code></pre>
 <p>Now we can use this function combined with the <code>purrr</code> function <code>map_dfr</code> to iterate through the 8 tables and bind them together.</p>
 <pre class="r"><code>data &lt;- map_dfr(2:8, extract_table_df)
 glimpse(data)</code></pre>
-<pre><code>## Observations: 119
+<pre><code>## Observations: 120
 ## Variables: 5
 ## $ `Country/territory` &lt;chr&gt; &quot;Egypt&quot;, &quot;Ghana&quot;, &quot;Ivory Coast&quot;, &quot;Kenya&quot;, ...
 ## $ Yearentered         &lt;chr&gt; &quot;2007&quot;, &quot;2018&quot;, &quot;2015&quot;, &quot;2016&quot;, &quot;2011&quot;, &quot;2...

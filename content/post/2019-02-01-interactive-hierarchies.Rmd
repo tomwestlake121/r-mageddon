@@ -1,0 +1,126 @@
+---
+title: Interactive Hierarchies - Drowning in rats
+author: 'Tom Westlake'
+date: '2019-02-01'
+slug: interactive-hierarchies
+categories: []
+tags:
+  - intermediate
+  - visualisation
+  - interactive
+  - hierarchical
+  - R
+description: ''
+thumbnail: 'img/treemap.gif'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = F, warning = F)
+```
+
+It's been a while since my last blog (turns out moving both job and city requires some effort), but for my glorious return I've decided to dive into the world of interactive graphics. In particular I'm going to investigate some alternatives packages that allow us to visualise hierarchical data.
+
+Interactive visualisations within R can be created using [htmlwidgets](https://www.htmlwidgets.org/). This specific set of packages brings the a host of interactive JavaScript visusalisation libraries to R, without the user needing any prior JavaScript knowledge. Notable htmlwidget packages are:
+
+* [Leaflet](http://rstudio.github.io/leaflet/) - The premier JavaScript library for creating interactive maps.
+* [Plotly](https://plot.ly/r/)  - A library that makes interactive, publication-quality graphsm and can convert existing ggplot2 objects into interactive graphs.
+* [networkD3](http://christophergandrud.github.io/networkD3/) - A library that offers you the ability to create D3 network graphs.
+* [DT](http://rstudio.github.io/DT/) - an R interface to the JavaScript library DataTables, a great way for displaying tabular data.
+
+
+So lets get started. The most obvious example that came to me when thinking about hierarchical data, is the manner in which scientists classify living organisms. All organisism, with the broadest category at the top and most specific at the bottom, the scheme looks like this:
+
+- Kingdom
+- Phylum
+- Class
+- Order
+- Family
+- Genus
+- species
+
+After some digging around on the web I found [Mammal Species of the World](http://www.departments.bucknell.edu/biology/resources/msw3/), 3rd edition, a database of mammalian taxonomy. You can also download the entire taxonomy as a csv file. So lets start by loading the tidyverse and importing the data,
+
+
+```{r}
+library(tidyverse)
+
+raw_df <- read_csv("http://www.departments.bucknell.edu/biology/resources/msw3/export.asp")
+
+head(raw_df)
+
+```
+
+Ok so we've got a dataframe of 13582 different species of mammals, with different columns for different levels of the hierarchy, such as Order and Family. Theres a lot of latin spread throughout the species, but luckily there's also a "Common Names" column. To make this easier for me to get meaning I'll filter down to only species with common names. Also, from previous inspection I also know there are few non UTF-8 characters spread throughout so I'll correct.  Ok with that in mind, lets take a few steps to clean our data.
+
+```{r}
+library(janitor)
+
+tidy_df <-
+  raw_df %>%
+  # Turn column names into snake_case
+  clean_names() %>% 
+  # Leave only species with common names, that also aren't extinct
+  filter(
+    extinct == "False", 
+    !is.na(common_name)) %>%
+  # Replace pesky non UTF-8 characters
+  mutate(common_name = iconv(common_name, "UTF-8", "UTF-8",sub='')) %>% 
+  # Leave only the necessary columns
+  select(order, family, genus, common_name)
+
+head(tidy_df)
+```
+
+Now that our data is prepped, lets jump in to our first visualisation. This comes from the [collapsibleTree](https://github.com/AdeelK93/collapsibleTree) package, which creates Reingold-Tilford tree diagrams using D3.js. We simply pass our data to the `collapsibleTree` function, and specify the orders of the hierarchy. This tree diagram is a really powerful visualisation for hierarchy data as you can navigate your way through the entire hierarchy. By adding a tooltip, we can also see the number of species within each order.
+
+```{r}
+library(collapsibleTree)
+
+collapsibleTree(tidy_df, c("order", "family", "genus", "common_name"), tooltip = T)
+
+```
+
+But how about if we want a more visual representation of the different number of species within each order? One way is to scale the node size per the number of children.
+
+```{r}
+collapsibleTree(tidy_df, c("order", "family", "genus", "common_name"), nodeSize = "leafCount")
+```
+
+However the result for this particular dataset is not the most useful...
+
+So now we turn to our next package, the developing package [d3tm](https://gitlab.com/lajh87/d3tm), which has been built by a colleague of mine. This package allows you to create interactive treemaps in d3.js.
+
+You can install the package with the following code:
+
+```{r, eval = F}
+devtools::install_git("https://gitlab.com/lajh87/d3tm")
+```
+
+```{r}
+library(d3tm)
+
+tidy_df %>% 
+  add_count(common_name) %>% 
+  rename(count = n) %>% 
+  d3_nest2(value_col = "count", root = "Mammals") %>% 
+  ztm()
+```
+
+This diagram gives a more stark view, and we can instantly see how rodents are by far the biggest order of mammals.
+
+
+One final visualisation for hierarchical data is the sunburst diagram, from the [sunburstR](https://github.com/timelyportfolio/sunburstR) package. It isn't really a good fit for this dataset, but lets have a look anyway.
+
+```{r}
+library(sunburstR)
+
+tidy_df %>% 
+  add_count(common_name) %>% 
+  rename(V2 = n) %>% 
+  mutate(common_name = str_remove(common_name, "-")) %>% 
+  mutate(V1 = paste(order, family, genus, common_name, sep = "-")) %>% 
+  select(V1, V2) %>% 
+  sunburst()
+```
+
+That's a wrap for this blog. I haven't touched how to deal with hierarchical data within this blog, merely some unusual ways of visualising the data. If do you want to learn techniques for processing the data, I would recommend looking into the [data.tree](https://github.com/gluc/data.tree) package.

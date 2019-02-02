@@ -20,15 +20,15 @@ knitr::opts_chunk$set(message = F, warning = F)
 
 It's been a while since my last blog (turns out moving both job and city requires some effort), but for my glorious return I've decided to dive into the world of interactive graphics. In particular I'm going to investigate some alternatives packages that allow us to visualise hierarchical data.
 
-Interactive visualisations within R can be created using [htmlwidgets](https://www.htmlwidgets.org/). This specific set of packages brings the a host of interactive JavaScript visusalisation libraries to R, without the user needing any prior JavaScript knowledge. Notable htmlwidget packages are:
+Interactive visualisations within R can be created using [htmlwidgets](https://www.htmlwidgets.org/). This specific set of packages brings the a host of interactive JavaScript visualisation libraries to R, without the user needing any prior JavaScript knowledge. Notable htmlwidget packages are:
 
 * [Leaflet](http://rstudio.github.io/leaflet/) - The premier JavaScript library for creating interactive maps.
-* [Plotly](https://plot.ly/r/)  - A library that makes interactive, publication-quality graphsm and can convert existing ggplot2 objects into interactive graphs.
+* [Plotly](https://plot.ly/r/)  - A library that makes interactive, publication-quality graphs and can convert existing ggplot2 objects into interactive graphs.
 * [networkD3](http://christophergandrud.github.io/networkD3/) - A library that offers you the ability to create D3 network graphs.
 * [DT](http://rstudio.github.io/DT/) - an R interface to the JavaScript library DataTables, a great way for displaying tabular data.
 
 
-So lets get started. The most obvious example that came to me when thinking about hierarchical data, is the manner in which scientists classify living organisms. All organisism, with the broadest category at the top and most specific at the bottom, the scheme looks like this:
+So lets get started. The most obvious example that came to me when thinking about hierarchical data, is the manner in which scientists classify living organisms. All organism, with the broadest category at the top and most specific at the bottom, the scheme looks like this:
 
 - Kingdom
 - Phylum
@@ -38,7 +38,7 @@ So lets get started. The most obvious example that came to me when thinking abou
 - Genus
 - species
 
-After some digging around on the web I found [Mammal Species of the World](http://www.departments.bucknell.edu/biology/resources/msw3/), 3rd edition, a database of mammalian taxonomy. You can also download the entire taxonomy as a csv file. So lets start by loading the tidyverse and importing the data,
+After some digging around on the web I found [Mammal Species of the World](http://www.departments.bucknell.edu/biology/resources/msw3/), 3rd edition, a database of mammalian taxonomy. You can also download the entire taxonomy as a csv file. So lets start by loading the `tidyverse` and importing the data,
 
 
 ```{r}
@@ -50,7 +50,7 @@ head(raw_df)
 
 ```
 
-Ok so we've got a dataframe of 13582 different species of mammals, with different columns for different levels of the hierarchy, such as Order and Family. Theres a lot of latin spread throughout the species, but luckily there's also a "Common Names" column. To make this easier for me to get meaning I'll filter down to only species with common names. Also, from previous inspection I also know there are few non UTF-8 characters spread throughout so I'll correct.  Ok with that in mind, lets take a few steps to clean our data.
+Ok so we've got a dataframe of 13582 different species of mammals, with different columns for different levels of the hierarchy, such as Order and Family. The nomenclature consists mainly of Latin, which isn't something that means a lot to me. Luckily there is a column of `common_names`, so I'm going to use this variable instead of `species`. I'll filter down to those species which are neither extinct and also have a entry in `common_names`. If I had more domain knowledge, this isn't the route I would take, but as I want to explore the data, `Giraffe` conveys more meaning than `camelopardalis` .From previous inspection I also know there are few non UTF-8 characters spread throughout so I'll correct that too. So with that in mind, lets take a few steps to clean our data.
 
 ```{r}
 library(janitor)
@@ -71,12 +71,12 @@ tidy_df <-
 head(tidy_df)
 ```
 
-Now that our data is prepped, lets jump in to our first visualisation. This comes from the [collapsibleTree](https://github.com/AdeelK93/collapsibleTree) package, which creates Reingold-Tilford tree diagrams using D3.js. We simply pass our data to the `collapsibleTree` function, and specify the orders of the hierarchy. This tree diagram is a really powerful visualisation for hierarchy data as you can navigate your way through the entire hierarchy. By adding a tooltip, we can also see the number of species within each order.
+Now that our data is prepared, lets jump in to our first visualisation. This comes from the [collapsibleTree](https://github.com/AdeelK93/collapsibleTree) package, which creates Reingold-Tilford tree diagrams using D3.js. We simply pass our data to the `collapsibleTree` function, and specify the orders of the hierarchy. This collapsible tree diagram is a really powerful visualisation for hierarchy data as you can navigate your way through the entire hierarchy. 
 
 ```{r}
 library(collapsibleTree)
 
-collapsibleTree(tidy_df, c("order", "family", "genus", "common_name"), tooltip = T)
+collapsibleTree(tidy_df, c("order", "family", "genus", "common_name"))
 
 ```
 
@@ -96,17 +96,22 @@ You can install the package with the following code:
 devtools::install_git("https://gitlab.com/lajh87/d3tm")
 ```
 
+Now we have the package installed we can create the visualisation. Treemaps require a value to size the rectangles, so let's create a dummy count column that gives us the number of species.
+
 ```{r}
 library(d3tm)
 
 tidy_df %>% 
+  # Create count of species column
   add_count(common_name) %>% 
-  rename(count = n) %>% 
+  # Column named n causes error, so rename to count
+  rename(count = n) %>%
+  # Turn data into JSON format
   d3_nest2(value_col = "count", root = "Mammals") %>% 
   ztm()
 ```
 
-This diagram gives a more stark view, and we can instantly see how rodents are by far the biggest order of mammals.
+This diagram gives a more stark view, and we can instantly see how rodents are by far the biggest order of mammals. We can click through this treemap and find out within the Rodentia order, within which Muridae is the largest family, within which Rattus is the largest genus. Upon opening the Rattus genus we discover 66 different species of rats, like the Timor Forest Rat and the Roof Rat! This isn't quite the ideal use for this visualisation, as in the final tier, each species has a count of 1, but I wanted to understand what species made up each genus.
 
 
 One final visualisation for hierarchical data is the sunburst diagram, from the [sunburstR](https://github.com/timelyportfolio/sunburstR) package. It isn't really a good fit for this dataset, but lets have a look anyway.

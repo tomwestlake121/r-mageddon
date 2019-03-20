@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Does Luke turn to the Dark Side?</title>
+	<meta name="description" content="">
+	<meta name="generator" content="Hugo 0.45.1" />
+	<meta property="og:title" content="Does Luke turn to the Dark Side?" />
+<meta property="og:description" content="A few weeks ago I attended a text analytics hackathon, that was immensely enjoyable. Text analysis is something that is quite far from my average day job and I really enjoyed picking up some new skills and playing with the tidytext package. If you are looking to dive into text analytics, I thoroughly recommend the brilliant Text Mining with R book by Julia Silge and David Robinson. The data we experimented with at the event was the three scripts from THE Star Wars Trilogy (you know which one I mean) and I was keen to see if we could use sentiment analysis to distinguish whether a character was from the Light or Dark side." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/does-luke-turn-to-the-dark-side/" />
+
+
+
+<meta property="article:published_time" content="2019-03-19T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2019-03-19T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+	<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Does Luke turn to the Dark Side?"/>
+<meta name="twitter:description" content="A few weeks ago I attended a text analytics hackathon, that was immensely enjoyable. Text analysis is something that is quite far from my average day job and I really enjoyed picking up some new skills and playing with the tidytext package. If you are looking to dive into text analytics, I thoroughly recommend the brilliant Text Mining with R book by Julia Silge and David Robinson. The data we experimented with at the event was the three scripts from THE Star Wars Trilogy (you know which one I mean) and I was keen to see if we could use sentiment analysis to distinguish whether a character was from the Light or Dark side."/>
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<script type="text/javascript" src="/js/scripts.js"></script>
+	<link rel="shortcut icon" href="/favicon.ico">
+	
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123754356-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+</head>
+<body class="body body-right-sidebar">
+	<div class="container container-outer">
+		<header class="header">
+			<div class="container container-inner">
+				<div class="logo" role="banner">
+					<a class="logo__link" href="/" title="R-mageddon" rel="home">
+						<div class="logo__title">R-mageddon</div>
+						<div class="logo__tagline">I&#39;ve not failed, I&#39;ve just found 10,000 ways that won&#39;t work.</div>
+					</a>
+				</div>
+			</div>
+			
+<nav class="menu">
+	<ul class="menu__list">
+		<li class="menu__item"><a class="menu__link" href="/about/">ABOUT ME</a></li>
+	</ul>
+</nav>
+
+		</header>
+		<div class="wrapper clearfix">
+
+<main class="main content">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Does Luke turn to the Dark Side?</h1><div class="post__meta meta">
+<svg class="icon icon-time" width="16" height="14" viewBox="0 0 16 16"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
+<time class="post__meta-date meta-date" datetime="2019-03-19T00:00:00">March 19, 2019</time></div>
+		</header>
+		<figure class="post__thumbnail">
+			<img src="/img/luke_final.gif" alt="Does Luke turn to the Dark Side?">
+		</figure><div class="post__content clearfix">
+			<p>A few weeks ago I attended a text analytics hackathon, that was immensely enjoyable. Text analysis is something that is quite far from my average day job and I really enjoyed picking up some new skills and playing with the <code>tidytext</code> package. If you are looking to dive into text analytics, I thoroughly recommend the brilliant <a href="https://www.tidytextmining.com/">Text Mining with R book</a> by Julia Silge and David Robinson. The data we experimented with at the event was the three scripts from THE Star Wars Trilogy (you know which one I mean) and I was keen to see if we could use sentiment analysis to distinguish whether a character was from the Light or Dark side. Additionally I wanted to see if we could track a character&rsquo;s journey through the 3 films and see how their sentiment fluctuated.</p>
+
+<p>So lets load up our packages.</p>
+
+<pre><code class="language-r">library(tidyverse)
+library(tidytext)
+library(gganimate)
+library(magick)
+</code></pre>
+
+<p>Luckily for us the data exists on GitHub, which helps us read the data straight into R.</p>
+
+<pre><code class="language-r">## Url for each film's script
+urls &lt;- c(&quot;https://raw.githubusercontent.com/gastonstat/StarWars/master/Text_files/SW_EpisodeIV.txt&quot;,
+          &quot;https://raw.githubusercontent.com/gastonstat/StarWars/master/Text_files/SW_EpisodeV.txt&quot;,
+          &quot;https://raw.githubusercontent.com/gastonstat/StarWars/master/Text_files/SW_EpisodeVI.txt&quot;)
+
+## Read in each script and combine them into one dataframe. Ensure each film is marked by the Episode numeral.
+raw_data &lt;- 
+  map_dfr(urls, read.table, .id = &quot;film&quot;) %&gt;%
+  mutate(film = recode(film, `1` = &quot;IV&quot;, `2` = &quot;V&quot;, `3` = &quot;VI&quot;))
+
+head(raw_data)
+</code></pre>
+
+<pre><code>##   film character
+## 1   IV  THREEPIO
+## 2   IV  THREEPIO
+## 3   IV  THREEPIO
+## 4   IV  THREEPIO
+## 5   IV  THREEPIO
+## 6   IV      LUKE
+##                                                                                                   dialogue
+## 1  Did you hear that?  They've shut down the main reactor.  We'll be destroyed for sure.  This is madness!
+## 2                                                                                            We're doomed!
+## 3                                                        There'll be no escape for the Princess this time.
+## 4                                                                                             What's that?
+## 5 I should have known better than to trust the logic of a half-sized thermocapsulary dehousing assister...
+## 6                                       Hurry up!  Come with me!  What are you waiting for?!  Get in gear!
+</code></pre>
+
+<p>Now we have read the data in, we can see we have three columns, denoting the film, character speaking and their line of dialogue. Now the first part of this analysis is to split the dialogue into separate words, using the <code>unnest_tokens</code> function from the tidytext package.</p>
+
+<pre><code class="language-r">words_per_char &lt;- 
+  raw_data %&gt;% 
+  unnest_tokens(word, dialogue)
+
+head(words_per_char)
+</code></pre>
+
+<pre><code>##     film character    word
+## 1     IV  THREEPIO     did
+## 1.1   IV  THREEPIO     you
+## 1.2   IV  THREEPIO    hear
+## 1.3   IV  THREEPIO    that
+## 1.4   IV  THREEPIO they've
+## 1.5   IV  THREEPIO    shut
+</code></pre>
+
+<p>Now we have the words by character we can visualise the most common words, spoken by the most important characters. The <code>stop_words</code> dataframe, combined with dplyr&rsquo;s <code>anti_join</code> allows us to eliminate pesky stop words, such as &ldquo;the&rdquo; and &ldquo;it&rdquo;, so we can focus on words that can provide us with more insight.</p>
+
+<pre><code class="language-r">## Identify the 9 characters who speak the most words
+top_9_chars &lt;- 
+  words_per_char %&gt;% 
+  count(character) %&gt;% 
+  top_n(9) %&gt;% 
+  select(character)
+
+words_per_char %&gt;% 
+  count(character, word) %&gt;% 
+  ## Remove the pesky stop words
+  anti_join(stop_words) %&gt;% 
+  ## Keep only the 9 characters with the most words
+  inner_join(top_9_chars) %&gt;% 
+  group_by(character) %&gt;% 
+  ## Get the 10 most frequent words spoken by character
+  top_n(10) %&gt;% 
+  ggplot(aes(fct_reorder(word, n), n, fill = character)) + 
+  geom_col() + 
+  facet_wrap(~character, scales = &quot;free&quot;) + 
+  coord_flip() + guides(fill = F) + 
+  theme_light() + 
+  labs(title = &quot;Most frequent words&quot;, subtitle = &quot;By characters with the most words&quot;, x = &quot;Word&quot;, y = &quot;Number of times&quot;)
+</code></pre>
+
+<p><img src="/post/2019-03-19-does-luke-turn-to-the-dark-side_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+
+<p>We can see some of the classic words coming out in this chart, the &ldquo;sir&rdquo; from Threepio and &ldquo;master&rdquo; from Darth Vader, with &ldquo;Luke&rdquo; seeing plenty of action.</p>
+
+<p>Now let&rsquo;s crack on with undertaking the sentiment analysis. The <code>tidytext</code> package comes with three built-in sentimnet lexicons:</p>
+
+<ul>
+<li><code>AFINN</code> lexicon, which assigns a score between -5 and 5, where negative numbers indicate negative sentiment and positive numbers indicating postitive sentiment.</li>
+<li><code>bing</code> lexicon, which categorises words in a binary fashion, either positive or negative.</li>
+<li><code>nrc</code> lexicon, which categorises words into a number of different categories, such as anger, disgust, surprise etc..</li>
+</ul>
+
+<p>For this piece of analysis I decided to use the <code>AFINN</code> lexicon, so the more negative/positive a word is, the greater it will be scored. For this piece of analysis I&rsquo;ve made the very broad assumption that words scored with a positive sentiment indicate the character is acting in &ldquo;the Light side of the Force&rdquo; and vice-versa.</p>
+
+<pre><code class="language-r">word_sentiments &lt;- 
+  words_per_char %&gt;% 
+  ## Join on the sentiment score and keep only words that have been scored
+  inner_join(get_sentiments(&quot;afinn&quot;)) %&gt;% 
+  group_by(character) %&gt;% 
+  mutate(wordcount = 1:n(),
+         cuma_sent = cumsum(score),
+         side = if_else(cuma_sent &gt; 0, &quot;light&quot;, &quot;dark&quot;),
+         word_side = if_else(score &gt; 0, &quot;light&quot;, &quot;dark&quot;))
+</code></pre>
+
+<p>Now that we&rsquo;ve assigned sentiment to the words used we can plot over time and see how this sentiment has fluctuated. So if we take Luke as an example:</p>
+
+<pre><code class="language-r">minmax &lt;- 
+  word_sentiments %&gt;% 
+  filter(character == &quot;LUKE&quot;) %&gt;% 
+  group_by(film) %&gt;% 
+  summarise(min = min(wordcount),
+            max = max(wordcount))
+
+word_sentiments %&gt;% 
+  filter(character == &quot;LUKE&quot;) %&gt;% 
+ggplot() +
+  labs(y = &quot;Cumaltive Sentiment&quot;, x = &quot;Wordcount&quot;, title = &quot;Luke Skywalker&quot;) +
+  theme_light() +
+  geom_rect(alpha = 0.7, fill = &quot;grey80&quot;, aes(xmin = 0, xmax = minmax$max[1], ymin = -Inf, ymax = Inf)) +
+  geom_rect(alpha = 0.7, fill = &quot;grey75&quot;, aes(xmin = minmax$min[2]-1, xmax = minmax$max[2], ymin = -Inf, ymax = Inf)) +
+  geom_rect(alpha = 0.7, fill = &quot;grey70&quot;, aes(xmin = minmax$min[3]-1, xmax = minmax$max[3]+1, ymin = -Inf, ymax = Inf)) + 
+  geom_col(aes(wordcount, cuma_sent, fill = side), width = 1.01) + 
+  geom_text(aes(x = (minmax$max[1] + minmax$min[1])/2, y = 50), label = &quot;IV&quot;) +
+  geom_text(aes(x = (minmax$max[2] + minmax$min[2])/2, y = 50), label = &quot;V&quot;) +
+  geom_text(aes(x = (minmax$max[3] + minmax$min[3])/2, y = 50), label = &quot;VI&quot;) + 
+  scale_fill_manual(values = c(&quot;red&quot;, &quot;blue&quot;))
+</code></pre>
+
+<p><img src="/post/2019-03-19-does-luke-turn-to-the-dark-side_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+
+<p>We can see that Luke really struggles at the beginning of A New Hope, which makes sense as his whole world is shattered and his home destroyed very early on in this film. We can see he continues to struggle, but finally ends the film with a fairly sizable chunk of &ldquo;Light Side Sentiment&rdquo;. This continues to build up during the other two films and then has a dramatic fall right at the finale. Which again seems intuitive as he finally battles the Emperor and loses his father.</p>
+
+<p>Now let&rsquo;s contrast this with Dad.</p>
+
+<pre><code class="language-r">minmax &lt;- 
+  word_sentiments %&gt;% 
+  filter(character == &quot;VADER&quot;) %&gt;% 
+  group_by(film) %&gt;% 
+  summarise(min = min(wordcount),
+            max = max(wordcount))
+
+word_sentiments %&gt;% 
+  filter(character == &quot;VADER&quot;) %&gt;% 
+ggplot() +
+  labs(y = &quot;Cumaltive Sentiment&quot;, x = &quot;Wordcount&quot;, title = &quot;Darth Vader&quot;) +
+  theme_light() +
+  geom_rect(alpha = 0.7, fill = &quot;grey80&quot;, aes(xmin = 0, xmax = minmax$max[1], ymin = -Inf, ymax = Inf)) +
+  geom_rect(alpha = 0.7, fill = &quot;grey75&quot;, aes(xmin = minmax$min[2]-1, xmax = minmax$max[2], ymin = -Inf, ymax = Inf)) +
+  geom_rect(alpha = 0.7, fill = &quot;grey70&quot;, aes(xmin = minmax$min[3]-1, xmax = minmax$max[3]+1, ymin = -Inf, ymax = Inf)) + 
+  geom_col(aes(wordcount, cuma_sent, fill = side), width = 1.01) + 
+  geom_text(aes(x = (minmax$max[1] + minmax$min[1])/2, y = 20), label = &quot;IV&quot;) +
+  geom_text(aes(x = (minmax$max[2] + minmax$min[2])/2, y = 20), label = &quot;V&quot;) +
+  geom_text(aes(x = (minmax$max[3] + minmax$min[3])/2, y = 20), label = &quot;VI&quot;) + 
+  scale_fill_manual(values = c(&quot;red&quot;, &quot;blue&quot;))
+</code></pre>
+
+<p><img src="/post/2019-03-19-does-luke-turn-to-the-dark-side_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+
+<p>Well it turns out the Darth was a pretty negative guy! Who knew!</p>
+
+<p>Now the final twist I wanted to get out of this data - can I somehow visualise the words that are causing the fluctuations in sentiment? This is where animation allows us to bring another factor into play. Now this process was a bit of a hack, as I don&rsquo;t believe it is possible to animate two graphs side by side with <code>gganimate</code> yet. So the process I took was:</p>
+
+<p>Create the first animated bar plot:</p>
+
+<pre><code class="language-r">x &lt;- 
+  word_sentiments %&gt;% 
+  filter(character == &quot;LUKE&quot;) %&gt;% 
+  ggplot() +
+  labs(y = &quot;Cumaltive Sentiment&quot;, x = &quot;Wordcount&quot;, title = &quot;Luke Skywalker&quot;) +
+  theme_light() +
+  #annotate(&quot;rect&quot;, xmin = 0, xmax = minmax$max[1], ymin = -Inf, ymax = Inf, alpha = 0.2, fill = &quot;red&quot;)
+  geom_rect(alpha = 0.7, fill = &quot;grey80&quot;, aes(xmin = 0, xmax = minmax$max[1], ymin = -Inf, ymax = Inf)) +
+  geom_rect(alpha = 0.7, fill = &quot;grey75&quot;, aes(xmin = minmax$min[2]-1, xmax = minmax$max[2], ymin = -Inf, ymax = Inf)) +
+  geom_rect(alpha = 0.7, fill = &quot;grey70&quot;, aes(xmin = minmax$min[3]-1, xmax = minmax$max[3]+1, ymin = -Inf, ymax = Inf)) + 
+  geom_col(aes(wordcount, cuma_sent, fill = side), width = 1.01) + 
+  geom_text(aes(x = (minmax$max[1] + minmax$min[1])/2, y = 50), label = &quot;IV&quot;) +
+  geom_text(aes(x = (minmax$max[2] + minmax$min[2])/2, y = 50), label = &quot;V&quot;) +
+  geom_text(aes(x = (minmax$max[3] + minmax$min[3])/2, y = 50), label = &quot;VI&quot;) + 
+  scale_fill_manual(values = c(&quot;red&quot;, &quot;blue&quot;)) +
+  transition_states(wordcount, wrap = F) + shadow_mark()
+
+xgif &lt;- animate(x, duration = 36.75, fps = 20)
+
+xgif
+</code></pre>
+
+<p><img src="2019-03-19-does-luke-turn-to-the-dark-side_files/figure-html/unnamed-chunk-8-1.gif" alt="" /><!-- --></p>
+
+<p>Then animate the words that get scored as below:</p>
+
+<pre><code class="language-r"> y &lt;- 
+   word_sentiments %&gt;% 
+  filter(character == &quot;LUKE&quot;) %&gt;% 
+   ggplot(aes(1,1, colour = word_side)) + geom_text(aes(label = word))  + theme_void() + theme(legend.position = &quot;none&quot;) + transition_states(wordcount) + scale_colour_manual(values = c(&quot;red&quot;, &quot;blue&quot;)) 
+ 
+ygif &lt;- animate(y, duration = 36.75, fps = 20) 
+
+ygif
+</code></pre>
+
+<p><img src="2019-03-19-does-luke-turn-to-the-dark-side_files/figure-html/unnamed-chunk-9-1.gif" alt="" /><!-- --></p>
+
+<p>Then finally use the <code>magick</code> package to stitch each frame of both the gifs together. This was a painfully slow script to run (and I also cropped my words gif in an online editor), but it does get the result I wanted.</p>
+
+<pre><code class="language-r"> x_mgif &lt;- image_read(xgif)
+ y_mgif &lt;- image_read(ygif)
+
+ new_gif &lt;- image_append(c(y_mgif[1], x_mgif[1]), stack = T)
+ for(i in 2:734){
+   combined &lt;- image_append(c(y_mgif[i], x_mgif[i]), stack = T)
+   new_gif &lt;- c(new_gif, combined)
+   print(paste0(&quot;combined up to &quot;, i))
+ }
+</code></pre>
+
+<p>After stitching together we finally get the desired result:</p>
+
+<p><img src="/img/luke_final.gif" alt="" /></p>
+
+<p>As always plenty of experimentation took place beforehand, with my personal favourite fail being the following:</p>
+
+<p><img src="/img/luke_fail.gif" alt="" /></p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 16 16"><path d="M16 9.5c0 .373-.24.74-.5 1l-5 5c-.275.26-.634.5-1 .5-.373 0-.74-.24-1-.5L1 8a2.853 2.853 0 0 1-.7-1C.113 6.55 0 5.973 0 5.6V1.4C0 1.034.134.669.401.401.67.134 1.034 0 1.4 0h4.2c.373 0 .95.113 1.4.3.45.187.732.432 1 .7l7.5 7.502c.26.274.5.632.5.998zM3.5 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/animation/" rel="tag">animation</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/advanced/" rel="tag">advanced</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/data-wrangling/" rel="tag">data wrangling</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/ggplot2/" rel="tag">ggplot2</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/gganimate/" rel="tag">gganimate</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/tidyverse/" rel="tag">tidyverse</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/visualisation/" rel="tag">visualisation</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/tidytext/" rel="tag">tidytext</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/text-analysis/" rel="tag">text analysis</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/sentiment-analysis/" rel="tag">sentiment analysis</a></li>
+	</ul>
+</div>
+	</article>
+	
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Tomas Westlake avatar" src="/img/me.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Tomas Westlake</span>
+	</div>
+	<div class="authorbox__description">
+		Data Scientist for the UK Government
+	</div>
+</div>
+	
+<nav class="post-nav row clearfix">
+	<div class="post-nav__item post-nav__item--prev col-1-2">
+		<a class="post-nav__link" href="/post/interactive-hierarchies/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Interactive Hierarchies - Drowning in rats</p></a>
+	</div>
+</nav>
+	
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-r-mageddon-netlify-com" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+</main>
+
+<aside class="sidebar">
+	
+<div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="/" />
+	</form>
+</div>
+	
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/does-luke-turn-to-the-dark-side/">Does Luke turn to the Dark Side?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/interactive-hierarchies/">Interactive Hierarchies - Drowning in rats</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/writing-an-r-package-from-scratch/">Writing an R package from scratch</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/reanimating-the-datasaurus/">Reanimating the Datasaurus</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/the-burger-king-pandemic/">The Burger King Pandemic</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/uk-population-pyramid/">UK Population Pyramid</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/interactive-premier-league-table/">Animated Premier League Table</a></li>
+		</ul>
+	</div>
+</div>
+	
+	
+<div class="widget-social widget">
+	<h4 class="widget-social__title widget__title">Social</h4>
+	<div class="widget-social__content widget__content">
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="Twitter" rel="noopener noreferrer" href="https://twitter.com/tomwestlake121" target="_blank">
+				<svg class="widget-social__link-icon icon-twitter" viewBox="0 0 384 312" width="24" height="24" fill="#fff"><path d="m384 36.9c-14.1 6.3-29.3 10.5-45.2 12.4 16.3-9.7 28.8-25.2 34.6-43.6-15.2 9-32.1 15.6-50 19.1-14.4-15.2-34.9-24.8-57.5-24.8-43.5 0-78.8 35.3-78.8 78.8 0 6.2.7 12.2 2 17.9-65.5-3.3-123.5-34.6-162.4-82.3-6.7 11.6-10.6 25.2-10.6 39.6 0 27.3 13.9 51.4 35 65.6-12.9-.4-25.1-4-35.7-9.9v1c0 38.2 27.2 70 63.2 77.2-6.6 1.8-13.6 2.8-20.8 2.8-5.1 0-10-.5-14.8-1.4 10 31.3 39.1 54.1 73.6 54.7-27 21.1-60.9 33.7-97.8 33.7-6.4 0-12.6-.4-18.8-1.1 34.9 22.4 76.3 35.4 120.8 35.4 144.9 0 224.1-120 224.1-224.1 0-3.4-.1-6.8-.2-10.2 15.4-11.1 28.7-25 39.3-40.8z"/></svg>
+				<span>Twitter</span>
+			</a>
+		</div>
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="LinkedIn" rel="noopener noreferrer" href="https://linkedin.com/in/tomas-westlake-56484a45" target="_blank">
+				<svg class="widget-social__link-icon icon-linkedin" viewBox="0 0 352 352" width="24" height="24" fill="#fff"><path d="M0,40v272c0,21.9,18.1,40,40,40h272c21.9,0,40-18.1,40-40V40c0-21.9-18.1-40-40-40H40C18.1,0,0,18.1,0,40z M312,32 c4.6,0,8,3.4,8,8v272c0,4.6-3.4,8-8,8H40c-4.6,0-8-3.4-8-8V40c0-4.6,3.4-8,8-8H312z M59.5,87c0,15.2,12.3,27.5,27.5,27.5 c15.2,0,27.5-12.3,27.5-27.5c0-15.2-12.3-27.5-27.5-27.5C71.8,59.5,59.5,71.8,59.5,87z M187,157h-1v-21h-45v152h47v-75 c0-19.8,3.9-39,28.5-39c24.2,0,24.5,22.4,24.5,40v74h47v-83.5c0-40.9-8.7-72-56.5-72C208.5,132.5,193.3,145.1,187,157z M64,288h47.5 V136H64V288z"/></svg>
+				<span>LinkedIn</span>
+			</a>
+		</div>
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="GitHub" rel="noopener noreferrer" href="https://github.com/tomwestlake121" target="_blank">
+				<svg class="widget-social__link-icon icon-github" viewBox="0 0 384 374" width="24" height="24" fill="#fff"><path d="m192 0c-106.1 0-192 85.8-192 191.7 0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2 0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8 0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7 0 0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4 0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5 0 25.6-.2 46.3-.2 52.6 0 5.1 3.5 11.1 13.2 9.2 76.2-25.5 131.2-97.3 131.2-182 0-105.9-86-191.7-192-191.7z"/></svg>
+				<span>GitHub</span>
+			</a>
+		</div>
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="Email" href="mailto:tom.westlake121@gmail.com">
+				<svg class="widget-social__link-icon icon-mail" viewBox="0 0 416 288" width="24" height="24" fill="#fff"><path d="m0 16v256 16h16 384 16v-16-256-16h-16-384-16zm347 16-139 92.5-139-92.5zm-148 125.5 9 5.5 9-5.5 167-111.5v210h-352v-210z"/></svg>
+				<span>tom.westlake121@gmail.com</span>
+			</a>
+		</div>
+	</div>
+</div>
+	
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/advanced" title="Advanced">Advanced (4)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/animation" title="Animation">Animation (5)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/beginner" title="Beginner">Beginner (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/data-wrangling" title="Data wrangling">Data wrangling (4)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/devtools" title="Devtools">Devtools (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/geospatial" title="Geospatial">Geospatial (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/gganimate" title="Gganimate">Gganimate (3)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/ggplot2" title="Ggplot2">Ggplot2 (3)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/gifski" title="Gifski">Gifski (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/glue" title="Glue">Glue (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/hierarchical" title="Hierarchical">Hierarchical (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/interactive" title="Interactive">Interactive (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/intermediate" title="Intermediate">Intermediate (2)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/magick" title="Magick">Magick (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/package" title="Package">Package (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/r" title="R">R (5)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/readxl" title="Readxl">Readxl (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/roxygen2" title="Roxygen2">Roxygen2 (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rvest" title="Rvest">Rvest (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/sentiment-analysis" title="Sentiment analysis">Sentiment analysis (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/sf" title="Sf">Sf (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/software-development" title="Software development">Software development (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/text-analysis" title="Text analysis">Text analysis (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tidytext" title="Tidytext">Tidytext (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tidyverse" title="Tidyverse">Tidyverse (4)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/usethis" title="Usethis">Usethis (1)</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/visualisation" title="Visualisation">Visualisation (6)</a>
+	</div>
+</div>
+</aside>
+	</div>
+		<footer class="footer">
+			<div class="container container-inner">
+				<div class="footer__copyright">&copy; 2019 R-mageddon. <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span></div>
+			</div>
+		</footer>
+	</div>
+
+<script>
+	var navigation = responsiveNav(".menu", {
+		navClass: "menu--collapse",
+	});
+</script></body>
+</html>

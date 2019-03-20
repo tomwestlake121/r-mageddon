@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tidytext on R-mageddon</title>
+    <link>/tags/tidytext/</link>
+    <description>Recent content in Tidytext on R-mageddon</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 19 Mar 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/tidytext/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Does Luke turn to the Dark Side?</title>
+      <link>/post/does-luke-turn-to-the-dark-side/</link>
+      <pubDate>Tue, 19 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/does-luke-turn-to-the-dark-side/</guid>
+      <description>A few weeks ago I attended a text analytics hackathon, that was immensely enjoyable. Text analysis is something that is quite far from my average day job and I really enjoyed picking up some new skills and playing with the tidytext package. If you are looking to dive into text analytics, I thoroughly recommend the brilliant Text Mining with R book by Julia Silge and David Robinson. The data we experimented with at the event was the three scripts from THE Star Wars Trilogy (you know which one I mean) and I was keen to see if we could use sentiment analysis to distinguish whether a character was from the Light or Dark side.</description>
+    </item>
+    
+  </channel>
+</rss>

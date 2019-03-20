@@ -90,6 +90,8 @@ head(words_per_char)
 
 Now we have the words by character we can visualise the most common words, spoken by the most important characters. The `stop_words` dataframe, combined with dplyr's `anti_join` allows us to eliminate pesky stop words, such as "the" and "it", so we can focus on words that can provide us with more insight.
 
+*Within this section of code you will see a reference to the `drlib` package. This is because I want to reorder the `word` column dependent upon the character. If I was to plot this using an average reorder, any character would have "Luke" as the top of their chart, because he was the most spoken word, even if that character didn't say "Luke" much.*
+
 
 ```r
 ## Identify the 9 characters who speak the most words
@@ -98,6 +100,9 @@ top_9_chars <-
   count(character) %>% 
   top_n(9) %>% 
   select(character)
+
+## Install David Robinsons package to get the reordering within a facet.
+## devtools::install_github("dgrtwo/drlib")
 
 words_per_char %>% 
   count(character, word) %>% 
@@ -108,7 +113,8 @@ words_per_char %>%
   group_by(character) %>% 
   ## Get the 10 most frequent words spoken by character
   top_n(10) %>% 
-  ggplot(aes(fct_reorder(word, n), n, fill = character)) + 
+  ggplot(aes(drlib::reorder_within(word, n, character), n, fill = character)) + 
+  drlib::scale_x_reordered() +
   geom_col() + 
   facet_wrap(~character, scales = "free") + 
   coord_flip() + guides(fill = F) + 
@@ -209,6 +215,13 @@ Create the first animated bar plot:
 
 
 ```r
+minmax <- 
+  word_sentiments %>% 
+  filter(character == "LUKE") %>% 
+  group_by(film) %>% 
+  summarise(min = min(wordcount),
+            max = max(wordcount))
+
 x <- 
   word_sentiments %>% 
   filter(character == "LUKE") %>% 
@@ -231,8 +244,7 @@ xgif <- animate(x, duration = 36.75, fps = 20)
 xgif
 ```
 
-![](2019-03-19-does-luke-turn-to-the-dark-side_files/figure-html/unnamed-chunk-8-1.gif)<!-- -->
-
+![](/img/luke.gif)
 
 Then animate the words that get scored as below:
 
@@ -248,7 +260,7 @@ ygif <- animate(y, duration = 36.75, fps = 20)
 ygif
 ```
 
-![](2019-03-19-does-luke-turn-to-the-dark-side_files/figure-html/unnamed-chunk-9-1.gif)<!-- -->
+![](/img/words.gif)
 
 Then finally use the `magick` package to stitch each frame of both the gifs together. This was a painfully slow script to run (and I also cropped my words gif in an online editor), but it does get the result I wanted.
 

@@ -143,12 +143,17 @@ head(words_per_char)
 
 <p>Now we have the words by character we can visualise the most common words, spoken by the most important characters. The <code>stop_words</code> dataframe, combined with dplyr&rsquo;s <code>anti_join</code> allows us to eliminate pesky stop words, such as &ldquo;the&rdquo; and &ldquo;it&rdquo;, so we can focus on words that can provide us with more insight.</p>
 
+<p><em>Within this section of code you will see a reference to the <code>drlib</code> package. This is because I want to reorder the <code>word</code> column dependent upon the character. If I was to plot this using an average reorder, any character would have &ldquo;Luke&rdquo; as the top of their chart, because he was the most spoken word, even if that character didn&rsquo;t say &ldquo;Luke&rdquo; much.</em></p>
+
 <pre><code class="language-r">## Identify the 9 characters who speak the most words
 top_9_chars &lt;- 
   words_per_char %&gt;% 
   count(character) %&gt;% 
   top_n(9) %&gt;% 
   select(character)
+
+## Install David Robinsons package to get the reordering within a facet.
+## devtools::install_github(&quot;dgrtwo/drlib&quot;)
 
 words_per_char %&gt;% 
   count(character, word) %&gt;% 
@@ -159,7 +164,8 @@ words_per_char %&gt;%
   group_by(character) %&gt;% 
   ## Get the 10 most frequent words spoken by character
   top_n(10) %&gt;% 
-  ggplot(aes(fct_reorder(word, n), n, fill = character)) + 
+  ggplot(aes(drlib::reorder_within(word, n, character), n, fill = character)) + 
+  drlib::scale_x_reordered() +
   geom_col() + 
   facet_wrap(~character, scales = &quot;free&quot;) + 
   coord_flip() + guides(fill = F) + 
@@ -252,7 +258,14 @@ ggplot() +
 
 <p>Create the first animated bar plot:</p>
 
-<pre><code class="language-r">x &lt;- 
+<pre><code class="language-r">minmax &lt;- 
+  word_sentiments %&gt;% 
+  filter(character == &quot;LUKE&quot;) %&gt;% 
+  group_by(film) %&gt;% 
+  summarise(min = min(wordcount),
+            max = max(wordcount))
+
+x &lt;- 
   word_sentiments %&gt;% 
   filter(character == &quot;LUKE&quot;) %&gt;% 
   ggplot() +
@@ -274,7 +287,7 @@ xgif &lt;- animate(x, duration = 36.75, fps = 20)
 xgif
 </code></pre>
 
-<p><img src="2019-03-19-does-luke-turn-to-the-dark-side_files/figure-html/unnamed-chunk-8-1.gif" alt="" /><!-- --></p>
+<p><img src="/img/luke.gif" alt="" /></p>
 
 <p>Then animate the words that get scored as below:</p>
 
@@ -288,7 +301,7 @@ ygif &lt;- animate(y, duration = 36.75, fps = 20)
 ygif
 </code></pre>
 
-<p><img src="2019-03-19-does-luke-turn-to-the-dark-side_files/figure-html/unnamed-chunk-9-1.gif" alt="" /><!-- --></p>
+<p><img src="/img/words.gif" alt="" /></p>
 
 <p>Then finally use the <code>magick</code> package to stitch each frame of both the gifs together. This was a painfully slow script to run (and I also cropped my words gif in an online editor), but it does get the result I wanted.</p>
 
